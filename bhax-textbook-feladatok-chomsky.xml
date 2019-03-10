@@ -17,12 +17,25 @@
             Megoldás forrása: <link xlink:href="https://github.com/lovaszbotond/Chomsky/blob/master/images/Turin1.png"></link> 
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="https://github.com/lovaszbotond/Chomsky/blob/master/images/Turin1.png" scale="45"/> 
+				<imagedata fileref="./images/Turin1.png" scale="45"/> 
 			</imageobject>
 		</mediaobject>           
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
+	A Turing gép három nagyobb fizikai részből áll: 
+	</para>
+<para>
+Egy író-olvasó fejből- ez a szimbólumokkal foglalkozik.(írja vagy olvassa)
+</para>
+<para>
+A végetelen szalag formályában létező részekre osztott memóriából.
+</para>
+<para>
+Valamint a gép programját tartalmaző vezérlőegységből.
+</para>
+<para>
+           A Turing gép alapvető működési elve , mikor decimálisból váltunk unárisba , hogy a meglévő számomból 
+folyamatosan egyeseket vonunk ki, és ezeket a levont egyeseket tároljuk.Maga az unáris rendszerben való ábrázolás  x darab egyforma jel/karakter egymás utáni leírásával történik . Az "x" a decimális szám.
         </para>
     </section>        
         
