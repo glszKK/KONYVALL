@@ -89,6 +89,43 @@ Lehet látni , hogy a <function>tb[3][0] = 42.0</function>a harmadik sor első e
         <para>
             Írj egy EXOR titkosítót C-ben!
         </para>
+<programlisting language="c"><![CDATA[
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+
+#define MAX_KULCS 100
+#define BUFFER_MERET 256
+
+
+int
+main (int argc, char **argv)
+{
+
+  char kulcs[MAX_KULCS];
+  char buffer[BUFFER_MERET];
+
+  int kulcs_index = 0;
+  int olvasott_bajtok = 0;
+
+  int kulcs_meret = strlen (argv[1]);
+  strncpy (kulcs, argv[1], MAX_KULCS);
+
+  while ((olvasott_bajtok = read (0, (void *) buffer, BUFFER_MERET)))
+    {
+
+      for (int i = 0; i < olvasott_bajtok; ++i)
+	{
+
+	  buffer[i] = buffer[i] ^ kulcs[kulcs_index];
+	  kulcs_index = (kulcs_index + 1) % kulcs_meret;
+
+	}
+
+      write (1, buffer, olvasott_bajtok);
+
+    }
+}]]></programlisting>
         <para>
             Megoldás videó:
         </para>
@@ -96,7 +133,7 @@ Lehet látni , hogy a <function>tb[3][0] = 42.0</function>a harmadik sor első e
             Megoldás forrása:<link xlink:href="https://github.com/lovaszbotond/Caesar/blob/master/Exor%20titkos%C3%ADt%C3%B3%20e.c"></link>                
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
+           Maga a program ahogy a feladat is kéri egy titkosító lesz melyhez egy x hosszu kulcsot megadba titkosíthatunk szövegeket.Megismerkedünk a headerben egy nem "#include"-al kezdődő pre-compiler által fordított függvénykönyvtárral,ami a nevéből adódóan is látjuk , hogy definíció.Nem is kell túlgondolnunk definiáljuk , hogy a <function>MAX_KULCS</function> = 100 és ezt nem fogjuk tudnu a mainen belül megváltoztatni.Szintúgy a <function>BUFFER_MERET</function>-et 256-al tesszük egyenlővé.Megadja mennyit tud egyszerre beolvasni(hány darab karaktert).Az <function>argc</function> megmondja hogy a programot hány szóval hívtam meg/fordítottam le. Tegyük fel |gcc e.c -o k.c|  akkor a spacek száma plusz 1 lesz az argc, ami jelenleg a példánkban 4.Az <function>argv</function> tárolja az argumentumokat.A <function>char</function> variable egy nagyon pici 1 byte-os történet.Karaktereket deklarálunk vele.A programban a "max_kulcs", illetve a buffer amit beállítottunk neki.A kulcs méret amivel folytathatjuk. A <function>strlen</function> a string.h-ban találjuk meg , és a megadott string, hogy hány karakter hosszú azt mondja meg. A <function>strncpy</function> "string copy" pedig hogy mibe, mit , milyen hosszút. A <function>while</function> ciklusban végigolvassa a szöveget a "read" segítségével ami egészen addig olvassa a fájlt, míg a fájl vége jellel nem találkozik.Majd ha megtalálta lelövi a programot. A "buffer" méretnyit olvassa be. A write pedig ki írja az olvasott byteokat. A "return 0;" nem kell a program végére, mert elvégzi a feladatot és off.
         </para>            
     </section>        
     <section>
@@ -119,11 +156,120 @@ Lehet látni , hogy a <function>tb[3][0] = 42.0</function>a harmadik sor első e
         <para>
             Írj egy olyan C programot, amely megtöri az első feladatban előállított titkos szövegeket!
         </para>
+<programlisting language="c"><![CDATA[
+#define MAX_TITKOS 4096
+#define OLVASAS_BUFFER 256
+#define KULCS_MERET 5
+#define _GNU_SOURCE
+
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+
+double
+atlagos_szohossz (const char *titkos, int titkos_meret)
+{
+  int sz = 0;
+  for (int i = 0; i < titkos_meret; ++i)
+    if (titkos[i] == ' ')
+      ++sz;
+
+  return (double) titkos_meret / sz;
+}
+
+int
+tiszta_lehet (const char *titkos, int titkos_meret)
+{
+  // a tiszta szoveg valszeg tartalmazza a gyakori magyar szavakat
+  // illetve az átlagos szóhossz vizsgálatával csökkentjük a
+  // potenciális töréseket
+
+  double szohossz = atlagos_szohossz (titkos, titkos_meret);
+
+  return szohossz > 5.0 && szohossz < 9.0
+    && strcasestr (titkos, "hogy") && strcasestr (titkos, "nem")
+    && strcasestr (titkos, "az") && strcasestr (titkos, "ha");
+
+}
+
+void
+exor (const char kulcs[], int kulcs_meret, char titkos[], int titkos_meret)
+{
+
+  int kulcs_index = 0;
+
+  for (int i = 0; i < titkos_meret; ++i)
+    {
+
+      titkos[i] = titkos[i] ^ kulcs[kulcs_index];
+      kulcs_index = (kulcs_index + 1) % kulcs_meret;
+
+    }
+
+}
+
+int
+exor_tores (const char kulcs[], int kulcs_meret, char titkos[],
+	    int titkos_meret)
+{
+
+  exor (kulcs, kulcs_meret, titkos, titkos_meret);
+
+  return tiszta_lehet (titkos, titkos_meret);
+
+}
+
+int
+main (void)
+{
+
+  char kulcs[KULCS_MERET];
+  char titkos[MAX_TITKOS];
+  char *p = titkos;
+  int olvasott_bajtok;
+
+  // titkos fajt berantasa
+  while ((olvasott_bajtok =
+	  read (0, (void *) p,
+		(p - titkos + OLVASAS_BUFFER <
+		 MAX_TITKOS) ? OLVASAS_BUFFER : titkos + MAX_TITKOS - p)))
+    p += olvasott_bajtok;
+
+  // maradek hely nullazasa a titkos bufferben  
+  for (int i = 0; i < MAX_TITKOS - (p - titkos); ++i)
+    titkos[p - titkos + i] = '\0';
+
+  // osszes kulcs eloallitasa
+  for (int ii = 'a'; ii <= 'z'; ++ii)
+    for (int ji = 'a'; ji <= 'z'; ++ji)
+      for (int ki = 'a'; ki <= 'z'; ++ki)
+	for (int li = 'a'; li <= 'z'; ++li)
+	  for (int mi = 'a'; mi <= 'z'; ++mi)
+	   
+		  {
+		    kulcs[0] = ii;
+		    kulcs[1] = ji;
+		    kulcs[2] = ki;
+		    kulcs[3] = li;
+		    kulcs[4] = mi;
+		  
+
+		    if (exor_tores (kulcs, KULCS_MERET, titkos, p - titkos))
+		      printf
+			("Kulcs: [%c%c%c%c%c]\nTiszta szoveg: [%s]\n",
+			 ii, ji, ki, li, mi,  titkos);
+
+		    // ujra EXOR-ozunk, igy nem kell egy masodik buffer  
+		    exor (kulcs, KULCS_MERET, titkos, p - titkos);
+		  }
+
+  return 0;
+}]]></programlisting>
         <para>
             Megoldás videó:
         </para>
         <para>
-            Megoldás forrása:                
+            Megoldás forrása:<link xlink:href="https://github.com/lovaszbotond/Caesar/blob/master/Exor%20titkos%C3%ADt%C3%B3%20t.c"></link>                
         </para>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
