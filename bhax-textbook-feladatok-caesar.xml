@@ -272,10 +272,19 @@ main (void)
             Megoldás forrása:<link xlink:href="https://github.com/lovaszbotond/Caesar/blob/master/Exor%20titkos%C3%ADt%C3%B3%20t.c"></link>                
         </para>
         <para>
-
-
-
-        </para>            
+A korábban megírt 4.2-es feladatunkban  látott program titkosított szövegét hivatott feltörni.Először megcsináljuk a kötelező, feladat megoldásánál fő szempontot játszó függvényeket , melyek segítenek a feltörésben.Nézzük őket darabonként.
+</para>
+<para>
+Az <function>atlagos_szohossz</function>-on belül láthatjuk a <function>const char *titkos</function>-t ami egy későbbiekben meg nem változtatható mutató.Beállítom hova mutasson a pointer és úgy is marad.
+A <function>for</function> cikluson belül az "i" 0-tól indul egészen míg a <function>titkos_meret</function>-et el nem éri.Az <function>if</function>-en belül megszamoljuk a karaktereket szavankent.Ha space jelenséget észlel tehát az "i"-edik eleme szóköz akkor növeljük az "sz"-t.Ami a "titkos" fakkba fog menni. A returnel pedig szimplan atlagot szamolunk.Elosztjuk a <function>titkos_meret</function>-et az <function>sz</function> szóközök számával.
+</para>
+<para>
+A <function>tiszta_lehet</function> függvény ahogy a komment szekcióban is írjuk a programon belül , a potenciális töréseket csökkenthetjük.Jelen esetben be is állítjuk, hogy az átlagos szóhossz 5 és 9 közés esik , a leggyakoribb magyar szavaink pedig , hogy - az - nem - ha , melyeket az <function>strcasestr</function> a <function>strstr()</function>-el ellentétben megvizsgálja ezeknek az előfordulását és rögzítik is azt." Tű a szénakazalban " ahogyan a manuál is írja.A lényege pedig , hogy a <function>szohossz</function>-ban tároljuk az <function>atlagos_szohossz</function> által kapott értékeket.
+        </para>
+<para>
+A mainen belül , szintén olvashatjuk a kommenteket melyek segítenek a feladat megértésében. 
+Megadjuk hogy jelen esetben a kulcsunk öt hosszú legyen , de lehetne harminc akár száz hosszú is.Egyébként a kulcs a-z-ig illetve 0-9-ig tartalmazhatja a karaktereket. Speciális karaktereket nem tartalmazhatna.A program sebességén tudunk növelni , viszont akkor át is kellene írnunk a forrásunkat. Egyenlőre ismerkedjünk ezzel a forrással, és a későbbiekben még találkozhatunk , ezen forrás továbbfejlesztett felgyorsított változatával.
+</para>            
     </section>        
     <section>
         <title>Neurális OR, AND és EXOR kapu</title>
