@@ -402,15 +402,72 @@ A <function>compute</function> paranccsal beadjuk neki hogy ellenőrizze le mag�
         <para>
             C++
         </para>
+<programlisting language="c"><![CDATA[
+#include "perceptron.hpp"
+#include <iostream>
+#include <png++/png.hpp>
+
+using namespace std;
+
+int main (int argc, char **argv) 
+{
+  png::image <png::rgb_pixel> png_image ( argv[1] );
+ 
+  int size = png_image.get_width() *png_image.get_height();
+
+  Perceptron* p = new Perceptron ( 3, size, 256, 1 );
+
+  double* image = new double[size];
+
+	for (int i=0; i < png_image.get_width(); ++i)
+		for (int j=0; j < png_image.get_height(); ++j)
+			image [ i*png_image.get_width() +j ] = png_image[i][j].red;
+
+  double value = (*p) ( image );
+
+  cout << value << endl;
+
+  delete p;
+  delete [] image;
+
+return 0;
+}
+]]>
+</programlisting>
         <para>
             Megoldás videó:
         </para>
         <para>
             Megoldás forrása: <link xlink:href="https://github.com/lovaszbotond/KONYVALL/blob/master/perceptron.hpp"></link>(perceptron.hpp forrása)               
         </para>
+<para>
+	    Megoldás forrása 2:<link xlink:href="https://github.com/lovaszbotond/KONYVALL/blob/master/perceptron.cpp"></link>(perceptron.cpp forrása)
+</para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
-        </para>            
+A neuron a mesterséges inteligenciában használt legelterjettebb változata,a perceptron,  amit egy alakfelismerő fépnek tekinthetünk.A nullából és egyesekből álló bemeneti mintázatokat hivatott megtanulni számos kísérlet árán.Ezeknek a bemeneteknek a súlyozott összegzését végzi, amelyet egy nem lineáris leképezés követ.
+        </para> 
+<para>
+A perceptron három fő elemből áll: 
+</para>
+<para>
+A retina: Bemeneti jeleket fogadó cellákat tartalmazza, melyek a legtöbb modellnél igen/nem válaszokat szolgáltattak, de lehetőség volt a stimulus intenzitásával arányos jelek generálására is.
+</para>
+<para>
+Az asszociatív cella: Egyes cellái csatlakozhatnak a retinacellákhoz, más asszociatív cellákhoz, és az alábbiakban ismertetett harmadik réteg döntési celláihoz. Ezek a cellák összegzik a hozzájuk érkező jeleket, impulzusokat.
+</para>
+<para>
+A döntés cella: Ez a réteg a perceptronnak a kimenete.Az asszociatív réteggel azonosan működnek, csak a bemenetek származhatnak akár egy, vagy több döntési cellától, akár az asszociatív celláktól.
+</para>
+<para>
+A feladatunk megoldásánál a bull.png segített, hogy megkapjuk az eredmenyünket az stdoutra. 
+Nézzük részenként hogyan is működik a perceptron.cpp
+</para>
+<para>
+A headerben includeáljuk a "perceptron.hpp" csomagunkat melyben a perceptron osztályt megtalálhatjuk , lényegében a perceptronnak a definíciója. Írunk egy maint. A mainben az első soromban beállítom , hogy nem én szeretnék képet létrehozni , hanem fájlból szeretném importálni.Ugye paraméterenként fogom átadni a nevét ami jelen esetünkben az első argumentumunk lesz majd --> <function> png::image pngrgb_pixel png_image ( argv[1] );</function>.
+
+</para>
+
+           
     </section>        
         
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
