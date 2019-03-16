@@ -81,7 +81,7 @@ main ()
         <para>
 A dinamikus memóriakezeléssel fogunk foglalkozni a feladat megoldása során.A feladatot a szokásos módon, a headerben a megfelelő függvénykönyvtárak behívásával kezdtük el.Létrehoztuk a <function> rs = 5 </function>-el  a sorainknak a számát amire szükségünk van.A <function>double **tb</function> deklarálunk és lefoglalunk a memóriában 8 byte-ot jelen esetben.Majd szimplán egy kiíratást végzünk . A <function>%p</function> segítségével egy hexadecimális számot fogunk ki írni mely a pointer számát fogja adni. Az adott sorban a vessző után látjuk , hogy a cimkéző operátor segítségével 1 bájt címét fogjuk ki íratni.Konkrétan lekérdezzük a címét.
 A <function>malloc</function> vissza ad egy pointert a lefoglalt területre. Memóriát foglal a szabad tárban. Kap egy paramétert ami az rs függvényében zajlik.(5)Következőkben látjuk , hogy a <function>size of (double*)</function>megmondja hogy mennyi hely(byte) kell a double* típusnak, ami a feladatban 5*8 azaz 40 byte helyet fog lefoglalni.Egyébként ami vissza kapunk ponter bármire mutathat a malloc esetében.Típus kényszerítjük ami miatt a "size of" méretét fogja vissza adni. A <function>tb</function>egyenlő a malloc által vissza adott értékkel memória foglalás szempontjából.Ha bármilyen hiba merülne fel akkor pedig a program kilép. Ezt biztosítjuk a <function>==NULL</function> szekcióban.A <function>NULL</function> nem mutat sehova.A folytatásban megkreáljuk az 5 sorból álló háromszögünket.Nagyon jól lehet szemléltetni a hivatkozásainkat , hogyan és miként működnek. 
-Lehet látni , hogy a <function>tb[3][0] = 42.0</function>a harmadik sor első elemét egyenlővé tesszük 42.00-val. Azért az első eleme, erről még nem beszáltünk, mert 0-tól kezdjük a számolást/indexelést.Az alatta lévő sorban a második elemre hivatkozunk, alatta a harmadik elemre, majd a negyedik elemre.A "*" al hivatkozok azon a címen tárolt pointerre.Tökéletesen reprezentálja a példa mily módon és hányféleképpen tudunk hivatkozni.A <function>for</function>ciklusukhoz különösképpen nem tudunk kiegészítést írni . A Chomsky fejezetünkben a hivatkozásos példánál kiveséztük nagy részét és a lényeg megtalálható benne ami ezen feladat megértéséhez kell.Amit esetlek meglehet említeni a <function>tb[i][j]</function>ahol az "i" a sor a "j" pedig az oszlopot jelzik.Fontos hogy vizsgáljuk a kapcsos zárójelek elhelyezkedését,hisz úgy fogjuk meg érteni mikor mi hajtódik végbe.A <function>%f</function> egy float típusú változót fog vissza adni.A végén a <function>free</function>-ről kell pár sort írnunk.Lényegében felszabadítja a memóriában tárolt/lévő dolgokat. Ez fontos, hogy ne maradjon meg az adat amit tárol , mert ha a program még dolgozna tovább és ezt nem tennénk meg akkor egy idő után betelne a ram.
+Lehet látni , hogy a <function>tb[3][0] = 42.0</function>a harmadik sor első elemét egyenlővé tesszük 42.00-val. Azért az első eleme, erről még nem beszáltünk, mert 0-tól kezdjük a számolást/indexelést.Az alatta lévő sorban a második elemre hivatkozunk, alatta a harmadik elemre, majd a negyedik elemre.A "*" al hivatkozok azon a címen tárolt pointerre.Tökéletesen reprezentálja a példa mily módon és hányféleképpen tudunk hivatkozni.A <function>for</function>ciklusukhoz különösképpen nem tudunk kiegészítést írni . A Chomsky fejezetünkben a hivatkozásos példánál kiveséztük nagy részét és a lényeg megtalálható benne ami ezen feladat megértéséhez kell.Amit esetlek meglehet említeni a <function>tb[i][j]</function>ahol az "i" a sor a "j" pedig az oszlopot jelzik.Fontos hogy vizsgáljuk a kapcsos zárójelek elhelyezkedését,hisz úgy fogjuk meg érteni mikor mi hajtódik végbe.A <function>%f</function> egy float típusú változót fog vissza adni.A végén a <function>free</function>-ről kell pár sort írnunk.Lényegében felszabadítja a memóriában tárolt/lévő pointerek által lefoglalt címeket. Ez fontos, hogy ne maradjon meg az adat amit tárol , mert ha a program még dolgozna tovább és ezt nem tennénk meg akkor egy idő után betelne a ram.
         </para>            
     </section>        
     <section>
@@ -291,6 +291,66 @@ Megadjuk hogy jelen esetben a kulcsunk öt hosszú legyen , de lehetne harminc a
         <para>
             R
         </para>
+<para>
+<programlisting language="R"><![CDATA[
+library(neuralnet)
+
+a1    <- c(0,1,0,1)
+a2    <- c(0,0,1,1)
+OR    <- c(0,1,1,1)
+
+or.data <- data.frame(a1, a2, OR)
+
+nn.or <- neuralnet(OR~a1+a2, or.data, hidden=0, linear.output=FALSE, stepmax = 1e+07, threshold = 0.000001)
+
+plot(nn.or)
+
+compute(nn.or, or.data[,1:2])
+
+
+a1    <- c(0,1,0,1)
+a2    <- c(0,0,1,1)
+OR    <- c(0,1,1,1)
+AND   <- c(0,0,0,1)
+
+orand.data <- data.frame(a1, a2, OR, AND)
+
+nn.orand <- neuralnet(OR+AND~a1+a2, orand.data, hidden=0, linear.output=FALSE, stepmax = 1e+07, threshold = 0.000001)
+
+plot(nn.orand)
+
+compute(nn.orand, orand.data[,1:2])
+
+
+
+a1      <- c(0,1,0,1)
+a2      <- c(0,0,1,1)
+EXOR    <- c(0,1,1,0)
+
+exor.data <- data.frame(a1, a2, EXOR)
+
+nn.exor <- neuralnet(EXOR~a1+a2, exor.data, hidden=0, linear.output=FALSE, stepmax = 1e+07, threshold = 0.000001)
+
+plot(nn.exor)
+
+compute(nn.exor, exor.data[,1:2])
+
+
+
+a1      <- c(0,1,0,1)
+a2      <- c(0,0,1,1)
+EXOR    <- c(0,1,1,0)
+
+exor.data <- data.frame(a1, a2, EXOR)
+
+nn.exor <- neuralnet(EXOR~a1+a2, exor.data, hidden=c(6, 4, 6), linear.output=FALSE, stepmax = 1e+07, threshold = 0.000001)
+
+plot(nn.exor)
+
+compute(nn.exor, exor.data[,1:2])
+]]></programlisting>
+
+</para>
         <para>
             Megoldás videó: <link xlink:href="https://youtu.be/Koyw6IH5ScQ">https://youtu.be/Koyw6IH5ScQ</link>
         </para>
@@ -298,8 +358,44 @@ Megadjuk hogy jelen esetben a kulcsunk öt hosszú legyen , de lehetne harminc a
             Megoldás forrása: <link xlink:href="https://gitlab.com/nbatfai/bhax/tree/master/attention_raising/NN_R">https://gitlab.com/nbatfai/bhax/tree/master/attention_raising/NN_R</link>               
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
-        </para>            
+A neuron egy olyan agysejt, amelynek alapfeladata az elektromos jelek összegyűjtése, feldolgozása és szétterjesztése.Azt gondoljuk, hogy az agy információfeldolgozó kapacitása elsősorban ilyen neuronok hálózatából alakul ki.A korai MI néhány kutatása mesterséges neurális hálók létrehozására irányult.Elnagyolva az mondható, hogy a neuron akkor "tüzel”, amikor a bemeneti értékek súlyozott összege meghalad egy küszöböt.A neurális háló a tanuló rendszerek egyik leghatékonyabb és legnépszerűbb formája, ezért megéri külön tárgyalni.A neurális hálók irányított kapcsolatokkal összekötött csomópontokból vagy egységekből állnak. Az "i"-edik egységtől az "i"-edik felé vezető kapcsolat hivatott az aktivizációt terjeszteni. Minden egyes kapcsolat rendelkezik egy hozzá asszociált numerikus súllyal , ami meghatározza a kapcsolat egységét és előjelét.Minden egyes "i" egység először a bemeneteinek egy súlyozott összegét számítja ki.
+A neurális hálózat bemeneti kapcsolatokból , függvényekból , aktivációs függvényekből , egy kimenetből és kimeneti kapcsolatokból áll.A kimenetét úgy kapja, hogy egy g aktivációs függvényt alkalmaz a kapott összegre.Később le is írjuk , mi is ez a függvény.
+</para>
+<para>
+A feladat a neurális OR , AND , EXOR kapukat kéri tőlönk.Megfelelő bemeneti és eltolássúlyokkal rendelkező, küszöbaktivációjú egységek képesek logikai kapuként működni.Ez azért fontos, mert azt jelenti, hogy ezen egységek felhasználásával tetszőleges logikai függvény kiszámítására tudunk hálózatot építeni.
+</para> 
+<para>
+A <function>library(neuralnet)</function>-es csomagot betöltjük a programunkba.Három részre bontva elmagyarazzuk/megtanítjuk , hogyan is alkalmazza a különböző bementeimet és hogy dolgozzon vele.
+A logikai kapuk különböző logikai igaz/hamis kiemeneteket adnak mely az OR esetében :           
+<programlisting>
+0-0->0
+0-1->1
+1-0->1
+1-1->1
+</programlisting>
+Az AND : 
+<programlisting>
+0-0->0
+0-1->0
+1-0->0
+1-1->1
+</programlisting>
+Az EXOR pedig : 
+<programlisting>
+0-0->0
+0-1->1
+1-0->1
+1-1->0
+</programlisting>
+Tehát ezt tanítjuk meg neki , hogy ezekkel a paraméterekkel dolgozzon.Az <function>or.data</function> sorunkban csinálunk belőle adatot.Átadjuk ezeket az adatokat a neurálnetnek.Szintén az <function>nn.orand</function> illetve az <function>nn.exor</function>sorokban is ezt tesszük meg. 
+Az OR és az AND esetében kiválóan működik a programunk.Miután megattuk neki a paramétereket a neurális háló elkezdi saját magát tanítani.Beállítja a megfelelő súlyokat amivel dolgozni fog és amikor azok kijönnek , akkor a tanítás befejeződik.
+A <function>compute</function> paranccsal beadjuk neki hogy ellenőrizze le magát és látjuk , hogy az eredményben a táblázatokhoz megfelelően egy nagyon közeli értéket kapunk, amiből már tudjuk , hogy helyes a megoldás és a művelet eredménye.Az EXOR esetében a súlyozás nem megfelelő nagyjából mindenött 0.5-ös eredményt kapunk pedig ahogy szemléltettük '0,1,1,0' a végkifejlett.Így hát megoldásnak azt választjuk , hogy a <function>hidden</function> azaz rejtett neuronokat nem 0-val hanem például 2-vel vagy programunk esetében egy kis sorozattal tesszül egyenlővé <function>hidden=c(6,4,6)</function>.Így azért is fog működni , mert rájöttünk , hogy a többrétegű hálózatokat lehet jól tanítani.A következő ábra  amit szemléltetni fogok a program egy lehetséges megvalósulása lesz és remélem segít megérteni mégjobban , hogyan is működik a folyamat.
+<mediaobject>
+			<imageobject>
+				<imagedata fileref="./images/neural.png" scale="45"/> 
+			</imageobject>
+		</mediaobject>           
+</para>
     </section>        
     <section>
         <title>Hiba-visszaterjesztéses perceptron</title>
