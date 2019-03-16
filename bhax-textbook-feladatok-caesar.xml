@@ -141,14 +141,71 @@ main (int argc, char **argv)
         <para>
             Írj egy EXOR titkosítót Java-ban!
         </para>
+<programlisting><![CDATA[
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Scanner;
+  class exor
+    {
+	      public static void main(String[] args)
+	    {
+		    FileInputStream fin=null;
+		    FileOutputStream fout=null;
+		    try
+		  {
+          fin=new FileInputStream("tiszta.txt");
+          int c;
+        ArrayList<Integer> in_v = new ArrayList<Integer>();
+        ArrayList<Integer> out_v = new ArrayList<Integer>();
+          Scanner in = new Scanner(System.in);
+          System.out.println("Enter key:");
+          String key = in.nextLine();
+			    if(key.length() !=9)
+			{
+			  	System.out.println("Bad key");
+				  return;
+			}
+		    	while((c=fin.read())!=-1)
+			{
+			  	    in_v.add(c);
+			}
+			    for(int i=0;i<in_v.size();i++)
+			{
+			  	     out_v.add(in_v.get(i)^key.charAt(i%9));
+			}
+			    fout = new FileOutputStream("titkos.txt");
+			        for(int i=0;i<out_v.size();i++)
+			{
+				System.out.printf("%c",out_v.get(i));
+			}
+			
+		}
+		catch(Exception ex)
+		{
+
+		}
+		finally
+		{
+			try
+			{
+				if(fin!=null) fin.close();
+				if(fout!=null) fout.close();
+			}catch(Exception ex)
+			{
+
+			}
+		}
+	}
+}]]></programlisting>
         <para>
             Megoldás videó:
         </para>
         <para>
-            Megoldás forrása:                
+            Megoldás forrása:<link xlink:href="https://github.com/lovaszbotond/Caesar/blob/master/java%20exor"></link>                
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
+	A feladat megoldásánál Petrus József Tamás segített.
+A program az előző feladat megoldása Java környezetben. A különbség a két program között , hogy az alap szöveget tartalmazó fájl neve tiszta.txt, amely egy mappában kell , hogy legyen a programunkkal illetve a kulcsot a standard inputrol kéri be , nem pedig parancssori agumentumként mint ahogyan az korábban volt.
         </para>            
     </section>        
     <section>
@@ -463,8 +520,13 @@ A feladatunk megoldásánál a bull.png segített, hogy megkapjuk az eredmenyün
 Nézzük részenként hogyan is működik a perceptron.cpp
 </para>
 <para>
-A headerben includeáljuk a "perceptron.hpp" csomagunkat melyben a perceptron osztályt megtalálhatjuk , lényegében a perceptronnak a definíciója. Írunk egy maint. A mainben az első soromban beállítom , hogy nem én szeretnék képet létrehozni , hanem fájlból szeretném importálni.Ugye paraméterenként fogom átadni a nevét ami jelen esetünkben az első argumentumunk lesz majd --> <function> png::image pngrgb_pixel png_image ( argv[1] );</function>.
-
+A headerben includeáljuk a "perceptron.hpp" csomagunkat melyben a perceptron osztályt megtalálhatjuk , lényegében a perceptronnak a definíciója. Írunk egy maint. A mainben az első soromban beállítom , hogy nem én szeretnék képet létrehozni , hanem fájlból szeretném importálni.Ugye paraméterenként fogom átadni a nevét ami jelen esetünkben az első argumentumunk lesz majd --> <function> png::image pngrgb_pixel png_image ( argv[1] );</function>.A kép méretét megadom az <function>int size</function>-al ahol a kép szélességét szorzom össze a kép magasságával.
+Majd foglalunk a szabad táron helyet a perceptronnak. Elnevezzük p-nek. A paraméterei : 3 layer, az első rétegnek size darab neuront akarok  adni tehát azt állítom be, a másodiknak 256 , a harmadiknak pedig egy szám lesz az eredménye tehát azt állítom be.Ha már foglaltunk a perceptronnak helyet a memóriában akkor a végén töröljük is azt ki , nehogy elfollyon a végén. Ezt a <function>delete p</function>-vel tesszük meg.
+Egy olyan osztályunk van a továbbiakban ami tartalmazza a függvényhívás operátort.Ennek átadjuk az image-t <function>double* image = new double[size]</function>. Így helyet foglaltunk az imagenek is.
+A <function>for</function> ciklust egyértelműen lehet olvasni korábbi tanulmányainkból kifolyólag , ahogy haladtunk a könyvvel.Első for ciklus a szélesség , második magasság.Majd ugye az image hez a sor oszlopot hozzá társítjuk.Az "i" sor "j" oszlop ahogy a "height"-"width" is mutatja.Ez akkor egyenlő az RGB objektumnak a jelen esetben red komponensével. De ez lehetne green .. blue .. vagy színek szorzata... stb.
+Majd kiszámoljuk az értéket <function>double value</function> , amit stdoutra ki is íratunk <function>cout value</function>.Magát a programot az alábbi paranccsal tudjuk fordítani : <function>g++ perceptron.hpp perceptron.cpp -o perc(bármi) -lpng</function> </para>
+<para>      
+Futtatni pedig : <function>./perc kép_neve.png</function>
 </para>
 
            
