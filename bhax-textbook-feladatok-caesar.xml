@@ -406,7 +406,7 @@ A <function>compute</function> paranccsal beadjuk neki hogy ellenőrizze le mag�
             Megoldás videó:
         </para>
         <para>
-            Megoldás forrása:                
+            Megoldás forrása: <link xlink:href="https://github.com/lovaszbotond/KONYVALL/blob/master/perceptron.hpp"></link>(perceptron.hpp forrása)               
         </para>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
