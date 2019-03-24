@@ -12,6 +12,119 @@
         </para>
 	<para>
 </para>
+
+        <para>
+            Megoldás videó:
+        </para>
+        <para>
+            Megoldás forrása:<link xlink:href="https://github.com/lovaszbotond/Mandelbrot/blob/master/Mandelsima"></link>                
+        </para>
+<programlisting language="c"><![CDATA[
+#include <png++/png.hpp>
+
+#define N 500
+#define M 500
+#define MAXX 0.7
+#define MINX -2.0
+#define MAXY 1.35
+#define MINY -1.35
+
+void GeneratePNG(int tomb[N][M]) {
+  png::image<png::rgb_pixel> image(N, M);
+
+  for (int x = 0; x < N; ++x) {
+    for (int y = 0; y < M; ++y) {
+      image[x][y] = png::rgb_pixel(tomb[x][y], tomb[x][y], tomb[x][y]);
+    }
+  }
+  image.write("kimenet.png");
+}
+
+struct Komplex {
+  double re, im;
+};
+
+
+int main() {
+
+  int tomb[N][M];
+
+  int i, j, k;
+  double dx = (MAXX - MINX) / N;
+  double dy = (MAXY - MINY) / M;
+
+  struct Komplex C, Z, Zuj;
+
+  int iteracio;
+
+  for (i = 0; i < M; ++i) {
+    for (j = 0; j < N; ++j) {
+      C.re = MINX + j * dx;
+      C.im = MAXY - i * dy;
+
+      Z.re = 0;
+      Z.im = 0;
+      iteracio = 0;
+
+      while (Z.re * Z.re + Z.im * Z.im < 4 && iteracio++ < 255) {
+        Zuj.re = Z.re * Z.re - Z.im * Z.im + C.re;
+        Zuj.im = 2 * Z.re * Z.im + C.im;
+        Z.re = Zuj.re;
+        Z.im = Zuj.im;
+
+      }
+      tomb[i][j] = 256 - iteracio;
+
+    }
+  }
+
+  GeneratePNG(tomb);
+
+  return 0;
+}
+]]></programlisting>
+	<para>
+	A feladat megoldásához , köszönöm a sok segítséget az UDPROG-os kódoknak , melyeket sourceforge.net weboldalán  meglehet találni és későbbi csokorbeli példák megoldásánál is lehet használni az általuk megszerzett tapasztalatot.
+	</para>
+<para>
+Ezen mandelbrot halmaz részletesebb leírását meg lehet találni a csokor második feladatánál ahol már be include-áljuk  a complex függvénykönyvtárat.A feladatunk , majdnem ki lehet jelenteni , hogy teljes mértékben hasonlít a másodikhoz. A különbség kettejük , között , hogy ebben a szakaszban a nehézséget , az adja , hogy saját magunknak kell le implementálnunk a különböző funkciókat/függvényeket amiket , alapvetően megkapunk a complex csomagban.
+A <function>#define</function> stabil definiálással az exor törésnél találkozhattunk először. Ezek lefixált elemek amelyek értékein később a programban nem tudunk változtatni.A <function>GeneratePNG</function> függvény mint ahogyan a nevébőúl is lehet következtetni , fogja nekünk elkészíteni a mandelbrot képet.A stílusosabb megoldást complex osztályos mandelbrot halmaz nyújtja , mert abban mi adhatjuk , meg mi legyen a képünk-nek a neve, míg itt a kimenet.png nevet fogja kapni.
+(<function>image.write("kimenet.png");</function>) </para>
+<para>
+x->szélesség y->magasság
+</para>
+<para>
+N->szélesség M->magasság
+</para>
+<para>
+a MIN/MAX magától értetődően - minimum / maximum
+</para>
+<para>
+re - valós rész , im - képzetes rész
+</para>
+<para>
+for ciklus i - kisebb mint #define M , for ciklus j - kisebb mint #define N
+</para>
+<para>
+A programban megtalálható számításokról részletesen a második példán keresztül fogunk megismerkedni.
+</para>
+<para>
+A két programkódot összehasonlítva lehet látni , ,hogy a <function>while</function> ciklusuon belül a komplex résznél nem kell megírnunk a számításokat.
+</para>
+
+    </section>        
+        
+    <section>
+        <title>A Mandelbrot halmaz a <filename>std::complex</filename> osztállyal</title>
+        <para>
+                
+        </para>
+        <para>
+            Megoldás videó:
+        </para>
+        <para>
+            Megoldás forrása:<link xlink:href="https://github.com/lovaszbotond/Mandelbrot/blob/master/Mandelcomplex"></link>             
+        </para>
 <programlisting language="c"><![CDATA[
 #include <iostream>
 #include "png++/png.hpp"
@@ -92,14 +205,8 @@ main ( int argc, char *argv[] )
 
 }
 ]]></programlisting>
-        <para>
-            Megoldás videó:
-        </para>
-        <para>
-            Megoldás forrása:                
-        </para>
 	<para>
-	A Mandelbrot-halmazt Benoǐt Mandelbrot fedezte fel, és Adrien Douady és John Hamal Hubbard nevezte el róla 1982-ben.A matematikában a Mandelbrot-halmaz azon c komplex számokból áll , melyekre az alábbi x'n rekurziv sorozat:
+	A Mandelbrot-halmazt Benoit Mandelbrot fedezte fel, és Adrien Douady és John Hamal Hubbard nevezte el róla 1982-ben.A matematikában a Mandelbrot-halmaz azon c komplex számokból áll , melyekre az alábbi x'n rekurziv sorozat:
 	</para>
 <para>
 x1:=c , x'n+1 := (x'n)^2 + c
@@ -112,22 +219,10 @@ A Mandelbrot-halmazt a komplex számsíkon ábrázolva, egy nevezetes fraktálal
 Most , hogy megvolt a tiszteletkörünk nézzük meg , hogyan is működik a programunk amit fentebb láthatunk.
 </para>
 <para>
-Láthatjuk , hogy az elején deklaráljuk a megfeleleő egységeinket <function>int/double</function> típusú változóinkat felhasználva.Az előző csokrokban is találkoztunk már a main melletti argumentumokkal. Ugye az <function>argc</function> utal arra , hogy hány szóval hívom meg a programunkat , illetve az <function>argv</function> amely a parancssori argumentumok kezeléséhez szükséges.Az <function>if</function> utasításblokkon belül léthatjuk , hogy az argc amennyiben 9 szóval hívjuk meg a programot az esetben a szélesség lesz a harmadik a magasság(ez a kettő lesz a komplex sík vizsgált tartományára feszített háló) lesz a negyedik az iterációs határ(tehát hogy maximum hány lépésig tudom nagyítani(nagyítási pontosság)) lesz az ötödik.Az a,b,c,d maga a komplex síkunknak a vizsgált tartománya amiket megadhatunk.Az <function>atoi</function> egy string típusu változót átkonvertál int típusúvá. Az <function>atof</function> pedig hasonlóan csak double típusúvá konvertál.Az <function>else</function> ágon arról lenne szó , ha véletlen rosszul futtatnánk vagy rosszul írnánk be, rossz sorrendben a paramétereket , akkor segít nekünk és az stoutra ki írja a helyes használatnak a feltételét.Ez utobbi esetben a program jelzi is az operációs rendszer felé hogy véget értem. (<function>return -1</function>) A <function>png::image</function> a png könyvtár alapkészletében találjuk , mellyel az adott sorban megadjuk a képünknek a szélességét,magasságát. A <function>dx/dy</function> esetében megadjuk , hogy az [a,b]x[c,d] tartományon milyen sűrű a megadott szélesség/magasság háló.Alatta találjuk  a valós komplex illetve imaginárius komplex részt, valós egészeket , imaginárius egészeket. Mint ahogy a komment is írja a j-vel végigmegyünk a sorokon a k-val pedig az oszlopokon egy <function>for</function> ciklus keretein belül.A <function>while</function>-on belül ha a z_n kisebb mint 4 akkor a feltétel nem teljesül. https://progpater.blog.hu/2011/02/26/tan_csodallak_amde_nem_ertelek_de_kepzetem_hegyvolgyedet_bejarja
-
+Az előző feladat nehézségeit kiküszöbölve ebben a megoldásban segítségül hívjuk a headerben az <function>#include complex</function>könyvtárat amelyben már megtalálhatóak a korábaan leírt függvények.
+Láthatjuk , hogy az elején deklaráljuk a megfeleleő egységeinket <function>int/double</function> típusú változóinkat felhasználva.Az előző csokrokban is találkoztunk már a main melletti argumentumokkal. Ugye az <function>argc</function> utal arra , hogy hány szóval hívom meg a programunkat , illetve az <function>argv</function> amely a parancssori argumentumok kezeléséhez szükséges.Az <function>if</function> utasításblokkon belül léthatjuk , hogy az argc amennyiben 9 szóval hívjuk meg a programot az esetben a szélesség lesz a harmadik a magasság(ez a kettő lesz a komplex sík vizsgált tartományára feszített háló) lesz a negyedik az iterációs határ(tehát hogy maximum hány lépésig tudom nagyítani(nagyítási pontosság)) lesz az ötödik.Az a,b,c,d maga a komplex síkunknak a vizsgált tartománya amiket megadhatunk.Az <function>atoi</function> egy string típusu változót átkonvertál int típusúvá. Az <function>atof</function> pedig hasonlóan csak double típusúvá konvertál.Az <function>else</function> ágon arról lenne szó , ha véletlen rosszul futtatnánk vagy rosszul írnánk be, rossz sorrendben a paramétereket , akkor segít nekünk és az stoutra ki írja a helyes használatnak a feltételét.Ez utobbi esetben a program jelzi is az operációs rendszer felé hogy véget értem. (<function>return -1</function>) A <function>png::image</function> a png könyvtár alapkészletében találjuk , mellyel az adott sorban megadjuk a képünknek a szélességét,magasságát. A <function>dx/dy</function> esetében megadjuk , hogy az [a,b]x[c,d] tartományon milyen sűrű a megadott szélesség/magasság háló.Alatta találjuk  a valós komplex illetve imaginárius komplex részt, valós egészeket , imaginárius egészeket. Mint ahogy a komment is írja a j-vel végigmegyünk a sorokon a k-val pedig az oszlopokon egy <function>for</function> ciklus keretein belül.A <function>while</function>-on belül ha a z_n kisebb mint 4 akkor a feltétel nem teljesült.A program az iteráció kisebb iterációshatár sérülésével lépett ki.Tehát feltesszük, hogy a c-ről ,hogy itt a<function>z_{n+1} = z_n * z_n + c</function> sorozat konvergens , azaz iteráció= iterációshatár.Az <function>iteracio%255</function> tehát ez miatt egyenéő 255-el.Ekkor az iteráció az esetlges nagyítások során  valahányszor *256 + 255.Ezt követően beállítjuk , hogy a felhasználó lássa a program , hogyan is halad az<function>int szazalek = ( double ) j / ( double ) magassag * 100.0;
+      std::cout  "\r"  szazalek  "%"  std::flush;</function> csipetnél, így az stdouton , jelezve "1%""2%"stb.."98%""99%""100%".ha elértük a "100%"-ot akkor a program ki írja , hogy az <function>argv[2]</function>-es helyen megnevezett programom ," mentve ". 
 </para>
-    </section>        
-        
-    <section>
-        <title>A Mandelbrot halmaz a <filename>std::complex</filename> osztállyal</title>
-        <para>
-                
-        </para>
-        <para>
-            Megoldás videó:
-        </para>
-        <para>
-            Megoldás forrása:                
-        </para>
     </section>        
                 
     <section>
@@ -140,9 +235,107 @@ Láthatjuk , hogy az elején deklaráljuk a megfeleleő egységeinket <function>
         <para>
             Megoldás forrása: <link xlink:href="https://gitlab.com/nbatfai/bhax/tree/master/attention_raising/Biomorf">https://gitlab.com/nbatfai/bhax/tree/master/attention_raising/Biomorf</link>
         </para>
+<programlisting language="c"><![CDATA[
+#include <iostream>
+#include "png++/png.hpp"
+#include <complex>
+
+int
+main ( int argc, char *argv[] )
+{
+
+    int szelesseg = 1920;
+    int magassag = 1080;
+    int iteraciosHatar = 255;
+    double xmin = -1.9;
+    double xmax = 0.7;
+    double ymin = -1.3;
+    double ymax = 1.3;
+    double reC = .285, imC = 0;
+    double R = 10.0;
+
+    if ( argc == 12 )
+    {
+        szelesseg = atoi ( argv[2] );
+        magassag =  atoi ( argv[3] );
+        iteraciosHatar =  atoi ( argv[4] );
+        xmin = atof ( argv[5] );
+        xmax = atof ( argv[6] );
+        ymin = atof ( argv[7] );
+        ymax = atof ( argv[8] );
+        reC = atof ( argv[9] );
+        imC = atof ( argv[10] );
+        R = atof ( argv[11] );
+
+    }
+    else
+    {
+        std::cout << "Hasznalat: ./3.1.2 fajlnev szelesseg magassag n a b c d reC imC R" << std::endl;
+        return -1;
+    }
+
+    png::image < png::rgb_pixel > kep ( szelesseg, magassag );
+
+    double dx = ( xmax - xmin ) / szelesseg;
+    double dy = ( ymax - ymin ) / magassag;
+
+    std::complex<double> cc ( reC, imC );
+
+    std::cout << "Szamitas\n";
+
+    // j megy a sorokon
+    for ( int y = 0; y < magassag; ++y )
+    {
+        // k megy az oszlopokon
+
+        for ( int x = 0; x < szelesseg; ++x )
+        {
+
+            double reZ = xmin + x * dx;
+            double imZ = ymax - y * dy;
+            std::complex<double> z_n ( reZ, imZ );
+
+            int iteracio = 0;
+            for (int i=0; i < iteraciosHatar; ++i)
+            {
+
+                z_n = std::pow(z_n, 3) + cc;
+                //z_n = std::pow(z_n, 2) + std::sin(z_n) + cc;
+                if(std::real ( z_n ) > R || std::imag ( z_n ) > R)
+                {
+                    iteracio = i;
+                    break;
+                }
+            }
+
+            kep.set_pixel ( x, y,
+                            png::rgb_pixel ( (iteracio*20)%255, (iteracio*40)%255, (iteracio*60)%255 ));
+        }
+
+        int szazalek = ( double ) y / ( double ) magassag * 100.0;
+        std::cout << "\r" << szazalek << "%" << std::flush;
+    }
+
+    kep.write ( argv[1] );
+    std::cout << "\r" << argv[1] << " mentve." << std::endl;
+]]></programlisting>
+
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
-        </para>                        
+             Eredetileg 1986-ba kell visszautazzunk , Pickover-hez aki először foglalkozott ezzel bár ma már bebizonyítottuk hogy az akkori kijelentések ma már nem helytállóak.A biomorfológia a biológiai morfológiákat jelenti.
+A biomorf algoritmus a gerinctelen szervezetekre hasonlító változatos és bonyolult formák létrehozásában használható.
+Számos technikát és módosítást vezettünk be, hogy ezeket a fraktálokat kapjuk.Részletes leírásukat  , és algoritmikus gondolkodásukat a hasonló feladat típusokhoz az alábbi weboldal nyújt kimerítő és hasznos információkkal- többek között a Biomorfok különböző típusú iterációival.
+        </para>
+<para>
+<link xlink:href="https://pdfs.semanticscholar.org/f54b/0b315d979142d7d33b8e69cc8942bad1f60d.pdf"></link>
+</para>
+<para>
+A csokor második feladványához hasonlóan indul programunk.Deklaráljuk a megfelelő egységeinket , melyekkel felokosítjuk a programunkat , hogy tudjon mivel dolgozni. Kiegészülve három számmal: "reC" "imC" és "R". A "reC" a C komplex számunk valós része az "imC" pedig a C komplex számunknak az imaginárius része.Az R pedig a valós szám.Ha azt át lépjük akkor a végtelenbe fogunk elszállni.Ezekkel természetesen a parancssori argumentumunkat is ki kell egészítenünk.Ami még újdonság a kódunkban az az <function>std::pow</function> ami a complex könyvtárban található. Elvégez helyettünk műveleteket , jelen esetben z_n-t a 3.ra emeljük vele és nem kell leírnunk háromszor egymés után szorzás formájában.Az 
+<function>std::real/std::imag</function> a valós illetve imaginárius rész. Feltételünkön belül találhatóak meg és rájuk érvényesek a korábban kitett végtelenbe kirepülős kijelentésem. A <function>break</function>-re azért van szükségünk , mert ha már minden rácspontot megvizsgáltunk , akkor ki kell léptetni az iterációból.A <function>kep.set_pixel ( x, y,
+                            png::rgb_pixel ( (iteracio*20)%255, (iteracio*40)%255, (iteracio*60)%255 ));</function> kódban színezhetjük illetve a formáján is mahinálhatjuk kedvünkre ,a lefutás után megkapott ábrát.</para>
+<para>
+A missziónk során a fentebb említett/linkelt cikk ami a fő vonulatát képezte programunk megvalósulásában.
+
+</para>                        
     </section>                     
 
     <section>
