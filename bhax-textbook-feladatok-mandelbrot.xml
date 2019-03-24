@@ -333,7 +333,7 @@ A csokor második feladványához hasonlóan indul programunk.Deklaráljuk a meg
 <function>std::real/std::imag</function> a valós illetve imaginárius rész. Feltételünkön belül találhatóak meg és rájuk érvényesek a korábban kitett végtelenbe kirepülős kijelentésem. A <function>break</function>-re azért van szükségünk , mert ha már minden rácspontot megvizsgáltunk , akkor ki kell léptetni az iterációból.A <function>kep.set_pixel ( x, y,
                             png::rgb_pixel ( (iteracio*20)%255, (iteracio*40)%255, (iteracio*60)%255 ));</function> kódban színezhetjük illetve a formáján is mahinálhatjuk kedvünkre ,a lefutás után megkapott ábrát.</para>
 <para>
-A missziónk során a fentebb említett/linkelt cikk ami a fő vonulatát képezte programunk megvalósulásában.
+A missziónk során a fentebb említett/linkelt cikk ami a fő vonulatát képezte programunk megvalósításában.
 
 </para>                        
     </section>                     
