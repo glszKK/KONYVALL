@@ -10,12 +10,111 @@
         <para>
                 
         </para>
+	<para>
+</para>
+<programlisting language="c"><![CDATA[
+#include <iostream>
+#include "png++/png.hpp"
+#include <complex>
+
+int
+main ( int argc, char *argv[] )
+{
+
+  int szelesseg = 1920;
+  int magassag = 1080;
+  int iteraciosHatar = 255;
+  double a = -1.9;
+  double b = 0.7;
+  double c = -1.3;
+  double d = 1.3;
+
+  if ( argc == 9 )
+    {
+      szelesseg = atoi ( argv[2] );
+      magassag =  atoi ( argv[3] );
+      iteraciosHatar =  atoi ( argv[4] );
+      a = atof ( argv[5] );
+      b = atof ( argv[6] );
+      c = atof ( argv[7] );
+      d = atof ( argv[8] );
+    }
+  else
+    {
+      std::cout << "Hasznalat: ./3.1.2 fajlnev szelesseg magassag n a b c d" << std::endl;
+      return -1;
+    }
+
+  png::image < png::rgb_pixel > kep ( szelesseg, magassag );
+
+  double dx = ( b - a ) / szelesseg;
+  double dy = ( d - c ) / magassag;
+  double reC, imC, reZ, imZ;
+  int iteracio = 0;
+
+  std::cout << "Szamitas\n";
+
+  // j megy a sorokon
+  for ( int j = 0; j < magassag; ++j )
+    {
+      // k megy az oszlopokon
+
+      for ( int k = 0; k < szelesseg; ++k )
+        {
+
+          // c = (reC, imC) a halo racspontjainak
+          // megfelelo komplex szam
+
+          reC = a + k * dx;
+          imC = d - j * dy;
+          std::complex<double> c ( reC, imC );
+
+          std::complex<double> z_n ( 0, 0 );
+          iteracio = 0;
+
+          while ( std::abs ( z_n ) < 4 && iteracio < iteraciosHatar )
+            {
+              z_n = z_n * z_n + c;
+
+              ++iteracio;
+            }
+
+          kep.set_pixel ( k, j,
+                          png::rgb_pixel ( iteracio%255, (iteracio*iteracio)%255, 0 ) );
+        }
+
+      int szazalek = ( double ) j / ( double ) magassag * 100.0;
+      std::cout << "\r" << szazalek << "%" << std::flush;
+    }
+
+  kep.write ( argv[1] );
+  std::cout << "\r" << argv[1] << " mentve." << std::endl;
+
+}
+]]></programlisting>
         <para>
             Megoldás videó:
         </para>
         <para>
             Megoldás forrása:                
         </para>
+	<para>
+	A Mandelbrot-halmazt Benoǐt Mandelbrot fedezte fel, és Adrien Douady és John Hamal Hubbard nevezte el róla 1982-ben.A matematikában a Mandelbrot-halmaz azon c komplex számokból áll , melyekre az alábbi x'n rekurziv sorozat:
+	</para>
+<para>
+x1:=c , x'n+1 := (x'n)^2 + c
+</para>
+<para>
+nem tart végtelenbe, azaz abszolút értékben ( a hosszára nézve ) korlátos.
+A Mandelbrot-halmazt a komplex számsíkon ábrázolva, egy nevezetes fraktálalakzat adódik.
+</para>
+<para>
+Most , hogy megvolt a tiszteletkörünk nézzük meg , hogyan is működik a programunk amit fentebb láthatunk.
+</para>
+<para>
+Láthatjuk , hogy az elején deklaráljuk a megfeleleő egységeinket <function>int/double</function> típusú változóinkat felhasználva.Az előző csokrokban is találkoztunk már a main melletti argumentumokkal. Ugye az <function>argc</function> utal arra , hogy hány szóval hívom meg a programunkat , illetve az <function>argv</function> amely a parancssori argumentumok kezeléséhez szükséges.Az <function>if</function> utasításblokkon belül léthatjuk , hogy az argc amennyiben 9 szóval hívjuk meg a programot az esetben a szélesség lesz a harmadik a magasság(ez a kettő lesz a komplex sík vizsgált tartományára feszített háló) lesz a negyedik az iterációs határ(tehát hogy maximum hány lépésig tudom nagyítani(nagyítási pontosság)) lesz az ötödik.Az a,b,c,d maga a komplex síkunknak a vizsgált tartománya amiket megadhatunk.Az <function>atoi</function> egy string típusu változót átkonvertál int típusúvá. Az <function>atof</function> pedig hasonlóan csak double típusúvá konvertál.Az <function>else</function> ágon arról lenne szó , ha véletlen rosszul futtatnánk vagy rosszul írnánk be, rossz sorrendben a paramétereket , akkor segít nekünk és az stoutra ki írja a helyes használatnak a feltételét.Ez utobbi esetben a program jelzi is az operációs rendszer felé hogy véget értem. (<function>return -1</function>) A <function>png::image</function> a png könyvtár alapkészletében találjuk , mellyel az adott sorban megadjuk a képünknek a szélességét,magasságát. A <function>dx/dy</function> esetében megadjuk , hogy az [a,b]x[c,d] tartományon milyen sűrű a megadott szélesség/magasság háló.Alatta találjuk  a valós komplex illetve imaginárius komplex részt, valós egészeket , imaginárius egészeket. Mint ahogy a komment is írja a j-vel végigmegyünk a sorokon a k-val pedig az oszlopokon egy <function>for</function> ciklus keretein belül.A <function>while</function>-on belül ha a z_n kisebb mint 4 akkor a feltétel nem teljesül. https://progpater.blog.hu/2011/02/26/tan_csodallak_amde_nem_ertelek_de_kepzetem_hegyvolgyedet_bejarja
+
+</para>
     </section>        
         
     <section>
@@ -84,3 +183,4 @@
     </section>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 </chapter>                
+
