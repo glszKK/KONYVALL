@@ -511,6 +511,7 @@ A Cuda programoknak kiterjesztése .cu
 <para>
 Az első lépésben végigmegyünk a szélesség/magasság rácson , amelynek fel is vesszük a számítási adatait.Szokásos módon kiszámítjuk a dx,dy értékeket majd beállítjuk helyesen az iterációshatárt.
 A j-k koordinátákon ki tudjuk számolni a globális komplexet.Ezen belül is mind a valós mind az imaginárius részét.A kommentek alapján melyet Bátfai Tanár Úr beültetett a programba egyébként tökéletesen végiglehet követni a programunknak a működését.A while cikluson belül megkell adjuk ismét a matematikai hátteret mert nem kértük segítségül az std::complex csomagot.A mandelkernelben definiáljuk a kép adatokat.Mérjük egyúttaé az időt is , hogy ezt később tudjuk közölni a userrel hogy mennyi ideig tartott a számítás.Ismét segítségül , ott van , hogyan is kell a programot helyesen hasznalni , ha nem sikerülne a futtatási parancsot kiadni helyesen.Képet létrehozzuk ezt követően , melynek beállítjuk a színét és a méretét valamint tudtára adjuk a felhasználónak , hogy a kép elmentésre került tehát mentve.
+A programon közösen dolgoztunk Czinke Mártonnal, aki egyben el is magyarázta nekem mi is a CUDA.
 </para>
     </section>                     
 
