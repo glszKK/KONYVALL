@@ -44,10 +44,89 @@
             Járd be az előző (inorder bejárású) fát pre- és posztorder is!
         </para>
         <para>
-            Megoldás videó:
+            Postorder bejárás:
+        <programlisting language="c"><![CDATA[
+            void kiir (Csomopont * elem, std::ostream & os)
+    {
+        // Nem létező csomóponttal nem foglalkozunk... azaz ez a rekurzió leállítása
+        if (elem != NULL)
+        {
+
+            ++melyseg;
+            kiir (elem->egyesGyermek (), os);
+            kiir (elem->nullasGyermek (), os);
+            --melyseg;
+	    for (int i = 0; i < melyseg; ++i)
+             (os << "---");
+            os << elem->getBetu () << "(" << melyseg - 0 << ")" << std::endl;
+        }
+    }]]></programlisting>
+            Pre order bejárás:
+        <programlisting language="c"><![CDATA[
+            void kiir (Csomopont * elem, std::ostream & os)
+    {
+        // Nem létező csomóponttal nem foglalkozunk... azaz ez a rekurzió leállítása
+        if (elem != NULL)
+        {
+	    for (int i = 0; i < melyseg; ++i)
+             	os << "---";
+            os << elem->getBetu () << "(" << melyseg - 2 << ")" << std::endl;
+            ++melyseg;
+	    kiir (elem->egyesGyermek (), os);
+            kiir (elem->nullasGyermek (), os);
+            --melyseg;
+        }
+    }]]></programlisting>
+            Inorder bejárás:
+        <programlisting language="c"><![CDATA[
+    void kiir (Csomopont * elem, std::ostream & os)
+    {
+        // Nem létező csomóponttal nem foglalkozunk... azaz ez a rekurzió leállítása
+        if (elem != NULL)
+        {
+
+            ++melyseg;
+	    kiir (elem->egyesGyermek (), os);
+	    for (int i = 0; i < melyseg; ++i)
+             	os << "---";
+            os << elem->getBetu () << "(" << melyseg - 1 << ")" << std::endl;
+            kiir (elem->nullasGyermek (), os);
+            --melyseg;
+        }
+    }]]></programlisting>
+        </para>
+        <para>
+            Megoldás videó:<link xlink:href="https://www.youtube.com/watch?v=Z32AiCcYpi8"></link>
         </para>
         <para>
             Megoldás forrása:                
+        </para>
+            <para>
+                Az első kódcsipet a postorder bejárást mutatja be.
+            </para>
+            <para>
+                A második a pre order bejárást.
+            </para>
+            <para>
+                Az alap eset pedig az inorder , amely a 3. kódcsipet.
+            </para>
+            <para>
+                Az Inorder alapesethez nem nyúltam hozzá , a for ciklussal feldolgozzuk az aktuális elemet , az egyesGyermek esetében 
+                a bal oldalt míg a nullasGyermek esetében a jobb oldalt vizsgáljuk. A Preorder adatszerkezetnél azért veszünk el 
+                a mélységből 2-t mert utána megnézzük a balt illetve a jobbat is.Ha nem tesszük meg a mélység +2 lesz a várttól. 
+                A Postordernél pedig azért nem veszünk el a mélységből -2-t mert utána nem nézzük meg a gyermekeket. A programot
+                ki írjuk három különböző txt kitejesztésű fájlba , melyekben le írva is láthatjuk majd a mélységek közötti különbségeket.
+                A programot az alábbi úton tudjuk fordítani illetve futtatni.
+            </para>
+        <para>
+            <function>g++ teszt.cpp (maga a programunknak a neve) -o v(output file)</function> majd futtatjuk és ki íratjuk a txt-be.
+        </para>
+        <para>
+            <function>./v teszt.cpp -o 'inorder.txt' vagy 'postorder.txt' vagy 'preorder.txt'</function>
+        </para>
+        <para>
+            A <function>tail</function> parancsal a terminálban az stdouton meg is tudjuk jeleníteni a txt állományokban kapott eredményeinket.
+            <function>tail preorder/postorder/inorder.txt</function> 
         </para>
     </section>        
                         
