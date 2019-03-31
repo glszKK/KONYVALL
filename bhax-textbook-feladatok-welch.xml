@@ -17,11 +17,131 @@
             Megoldás videó:
         </para>
         <para>
-            Megoldás forrása:                
+            Megoldás forrása: <link xlink:href="https://github.com/lovaszbotond/Welch/blob/master/polargen.cpp"></link>              
         </para>
+	<para>
+	    Megoldás forrása 2 : <link xlink:href="https://github.com/lovaszbotond/Welch/blob/master/polargen.java"></link>
+	</para>
+	<programlisting><![CDATA[
+import java.util.Random;
+
+public class PolarGen
+{
+	private double tarolt;
+	private boolean nincsTarolt;
+	private Random r;
+	private int RAND_MAX;
+	
+	public PolarGen()
+	{
+		nincsTarolt = true;
+		r = new Random();
+		r.setSeed(20);
+		this.RAND_MAX=100;
+	}
+	public PolarGen(Integer RAND_MAX)
+	{
+		nincsTarolt = true;
+		r = new Random();
+		r.setSeed(20);
+		this.RAND_MAX=RAND_MAX;
+	}
+	
+	public double kovetkezo()
+	{
+		if (nincsTarolt)
+	    {
+			
+			double u1, u2, v1, v2, w;
+			int i=0;
+	        do
+		    {
+			      u1 = r.nextInt() / (RAND_MAX + 1.0);
+			      u2 = r.nextInt() / (RAND_MAX + 1.0);
+			      v1 = 2 * u1 - 1;
+			      v2 = 2 * u2 - 1;
+			      w = v1 * v1 + v2 * v2;
+		    }
+		    while (w > 1 && i++ < 40000000);
+	        double r = Math.sqrt ((2 * Math.log10(w)) / w);
+	        tarolt = r * v2;
+	        nincsTarolt = !nincsTarolt;
+	        return r * v1;
+	    }
+	    else
+	    {
+	        nincsTarolt = !nincsTarolt;
+	        return tarolt;
+	    }
+	}
+}]]></programlisting>
+<programlisting><![CDATA[
+#include <iostream>
+#include <cstdlib>
+#include <cmath>
+#include <ctime>
+
+class PolarGen
+{
+public:
+  PolarGen ()
+  {
+    nincsTarolt = true;
+    std::srand (std::time (NULL));
+  }
+   ~PolarGen ()
+  {
+  }
+  double kovetkezo ()
+  {
+    if (nincsTarolt)
+      {
+        double u1, u2, v1, v2, w;
+        do
+    {
+      u1 = std::rand () / (RAND_MAX + 1.0);
+      u2 = std::rand () / (RAND_MAX + 1.0);
+      v1 = 2 * u1 - 1;
+      v2 = 2 * u2 - 1;
+      w = v1 * v1 + v2 * v2;
+    }
+        while (w > 1);
+
+        double r = std::sqrt ((-2 * std::log (w)) / w);
+
+        tarolt = r * v2;
+        nincsTarolt = !nincsTarolt;
+
+        return r * v1;
+      }
+    else
+      {
+        nincsTarolt = !nincsTarolt;
+        return tarolt;
+      }
+  }
+
+
+
+private:
+  bool nincsTarolt;
+  double tarolt;
+
+};
+
+
+int
+main (int argc, char **argv)
+{
+  PolarGen pg;
+
+  for (int i = 0; i < 10; ++i)
+    std::cout << pg.kovetkezo () << std::endl;
+
+  return 0;
+}]]></programlisting>
         <para>
-            Tanulságok, tapasztalatok, magyarázat... térj ki arra is, hogy a JDK forrásaiban a Sun programozói
-            pont úgy csinálták meg ahogyan te is, azaz az OO nemhogy nem nehéz, hanem éppen természetes neked!
+	Felső kódom a java megoldás alábbi pedig a c++ kivitelezés amit a könyven láthatunk , de szebb formában a két githubos linken keresztül láthatjuk őket.A Polargen nevű osztály létrehozásával kezdtük a feladatot , a  véletlenszám generátornak véletlenszerű random seedet adunk"(20)" maximum 100-ig megy, a konstruktorában pedig megadjuk , hogy még nincs eltárolt szám.A <function>kovetkezo</function> függvényünk érdeklődik az iránt , hogy van e tárolt számunk , és az esetben ha nincs akkor generál két számot , ebből az egyiket eltárolja -> logikai változót hamisra állítja , majd a másik számmal visszatér.Ez a számítási lépés két normális eloszlású számot állít elő,páratlanadik meghívásakor nem kell számolnunk, csak az előző lépés másik számát visszaadjuk.Az hogy páros vagy páratlan  a nincsTarolt logikai függvénnyel jelöljük.Igaz esetén azt jelenti , hogy az eltárolt változóban eltároltuk a vissza adandó számot.A feladat az objektum orientált programozásról szól.A Java SDK-ban is hasonlóan megírt kódcsipeteket látunk.Minden egy objektum , ha kicsit más szemszögből közelítjük meg ezt az egészet , akkor úgy is kifejezhetnénk , hogy vannak dolgok amelyeknek funkcipnális beállítottságai vannak mint a függvények , vagy pedig fix adatokkal rendelkeznek , viszont nem tartozik hozzájuk használati vagy bármilyen lényegi adat.
         </para>                
     </section>        
 
@@ -34,8 +154,258 @@
             Megoldás videó:
         </para>
         <para>
-            Megoldás forrása:                
-        </para>
+            Megoldás forrása:<link xlink:href="https://github.com/lovaszbotond/Welch/blob/master/LZWBinfa.c"></link>
+<programlisting language="c"><![CDATA[
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+typedef struct node{
+	char c;
+	struct node* left;
+	struct node* right;
+} Node;
+
+Node* fa;
+Node gyoker;
+
+#define null NULL
+
+Node* create_empty()
+{
+	Node* tmp = &gyoker;
+	tmp->c= '/';
+	tmp->left = null;
+	tmp->right = null;
+	return tmp;
+}
+
+Node* create_node(char val)
+{
+	Node* tmp = (Node*)malloc(sizeof(Node));
+	tmp->c=val;
+	tmp->left = null;
+	tmp->right = null;
+	return tmp;
+}
+
+void insert_tree(char val)
+{
+	if(val=='0')
+	{
+		if(fa->left == null)
+		{
+			fa->left = create_node(val);
+			fa = &gyoker;
+			//printf("Inserted into left.");
+		}
+		else
+		{
+			fa = fa->left;
+		}
+	}
+	else
+	{
+		if(fa->right == null)
+		{
+			fa->right = create_node(val);
+			fa = &gyoker;
+			//printf("Inserted into left.");
+		}
+		else
+		{
+			fa = fa->right;
+		}
+	}
+}
+
+void inorder(Node* elem,int depth)
+{
+
+	if(elem==null)
+	{
+		return;
+	}
+	inorder(elem->left,depth+1);
+	if(depth) 
+	{
+		char *spaces;
+		spaces =(char*) malloc(sizeof(char)*depth*2+1);
+		for(int i=0;i<depth;i+=2)
+		{
+			spaces[i]='-';
+			spaces[i+1]='-';
+		}
+		spaces[depth]='\0';
+
+		printf("%s%c\n",spaces,elem->c);
+	}
+	else
+	{
+		printf("%c\n",elem->c);
+	}
+	inorder(elem->right,depth+1);
+}
+
+void preorder(Node* elem,int depth)
+{
+	if(elem==null)
+	{
+		return;
+	}
+	if(depth) 
+	{
+		char *spaces;
+		spaces =(char*) malloc(sizeof(char)*depth*2+1);
+		for(int i=0;i<depth;i+=2)
+		{
+			spaces[i]='-';
+			spaces[i+1]='-';
+		}
+		spaces[depth*2]='\0';
+
+		printf("%s%c\n",spaces,elem->c);
+	}
+	else
+	{
+		printf("%c\n",elem->c);
+	}
+	preorder(elem->left,depth+1);	
+	preorder(elem->right,depth+1);
+}
+void postorder(Node* elem,int depth)
+{
+	if(elem==null)
+	{
+		return;
+	}
+	postorder(elem->left,depth+1);	
+	postorder(elem->right,depth+1);
+	if(depth) 
+	{
+		char *spaces;
+		spaces =(char*) malloc(sizeof(char)*depth*2+1);
+		for(int i=0;i<depth;i+=2)
+		{
+			spaces[i]='-';
+			spaces[i+1]='-';
+		}
+		spaces[depth*2]='\0';
+
+		printf("%s%c\n",spaces,elem->c);
+		free(spaces);
+	}
+	else
+	{
+		printf("%c\n",elem->c);
+	}
+}
+
+void destroy_tree(Node* elem)
+{
+	if(elem==null)
+	{
+		return;
+	}
+	destroy_tree(elem->left);
+	destroy_tree(elem->right);
+	if(elem->c == gyoker.c)
+	{
+
+	}
+	else
+	{
+		free(elem);
+	}
+}
+
+void usage()
+{
+	printf("Használat: ./binfa KAPCSOLÓ\n");
+	printf("Az KAPCSOLÓ lehet:\n");
+	printf("--preorder\tA bináris fa preorder bejárása\n");
+	printf("--inorder\tA bináris fa inorder bejárása\n");
+	printf("--postorder\tA bináris fa postorder bejárása\n");
+}
+
+int main(int argc, char** argv)
+{
+	srand(time(null));
+	fa = create_empty();
+	//gyoker = *fa;
+	for(int i=0;i<10000;i++)
+	{
+		int x=rand()%2;
+		if(x)
+		{
+			insert_tree('1');
+		}
+		else
+		{
+			insert_tree('0');
+		}
+	}
+	if(argc == 2)
+	{
+		if(strcmp(argv[1],"--preorder")==0)
+		{
+			preorder(&gyoker,0);
+		}
+		else if(strcmp(argv[1],"--inorder")==0)
+		{
+			inorder(&gyoker,0);
+		}
+		else if(strcmp(argv[1],"--postorder")==0)
+		{
+			postorder(&gyoker,0);
+		}
+		else
+		{
+			usage();
+		}
+	}
+	else
+	{
+		usage();
+	}
+	destroy_tree(&gyoker);
+	return 0;
+}]]></programlisting>                
+</para>
+<para>
+Az Lempel-Ziv-Welch algoritmus egy veszteségmentes tömörítési eljárás, ilyen lehet a gif formátuma és ezeket tömörítők is használhatják.
+</para>
+<para>
+A kódoló jelen esetben a szótárbeli paramétert küldi át , ez a kódolás során dinamikusan bővül.A kezdetleges helyzetétől addig kell a szimbólumokat olvasni , amíg az adott széria nem szerepel a szótárban.Ezután ennek a szériának elküldjük a sorozatunknak a paraméterét és felvesszük a következő szimbólummal kiegészítve, majd innentől folytatjuk az algoritmust.
+</para>
+<para>
+Az LZW binfa is ezen az elven fogja a tördelést megvalósítani.
+</para>
+<para>
+Az LZW bináris fában lévő csomópontjaink helyettesítésére a programunk első részében létrehozzuk a Node nevű struktúrát.Ennek a struktúrának van egy <function>char</function> típusú változója, illetve két Node-ra mutató mutató.
+</para>
+<para>
+A <function>create_empty</function> függvény a program használata előtt a működéshez szükséges kezdőértékeket be állítja a bináris fát illetően egy kitüntetett gyökérelemmel, ami a "/" karakterrel van megjelenítve a bejárások esetében
+</para>
+<para>
+Következő a <function>create_node</function> amely függvényünk generál egy csomópontot az argumentumként kapott karakterrel (<function>malloc(sizeof(Node))</function>) , a gyermekekre mutató mutatókat NULL-ra állítja be.
+</para>
+<para>
+Az <function>insert_tree</function> függvény valósítja meg az LZW bináris fa fel építését.A függvény először megnézi , hogy a kapott érték "0"-e és ha igaz , akkor megnézi , hogy a fa mutató által címzett csomópontnak van-e bal oldali gyermeke.Ez lenne a 0-ás gyermek.Ha van akkor a mutató a pillanatnyi csomópont baé gyermekére ugrik.Amennyiben nincs akkor létrehozza az aktuális csomópont bal oldali gyermekét, utána a fa a mutatót a gyökérre állítja.Ha a kapott értékünk nem "0" , az esetben a függvény végrahajtja a fent leírt utasításokat,annyi különbséggel , hogy a jobb mindazt a jobb oldali gyermekére teszi meg.
+</para>
+<para>
+Az <function>inorder</function> eljárás inorder módon azaz önmagát ismételve/rekurzívan bejárja a bináris fát.Ennél a bejárásnál először a bináris részfa bal oldalát járjuk be , majd feldolgozzuk a részfának a gyökérelemét.Ha ez megvan akkor feldolgozzuk a részfa jobb oldalát is.
+</para>
+<para>
+A <function>destroy_tree</function> az az eljárás ami rekurzívan postorder módon bejárja a fát és minden ismétlés/rekurzió végén felszabadítja a részfánknak a gyökérelemét. A felszabadítást megelőzően meg kell vizsgálni , hogy a részfa gyökere egyenlő-e a teljes fa gyökerével , mert ha igan akkor ebben a kivitelben a teljes fa gyökéreleme nem dinamikusan foglalt.
+</para>
+<para>
+A <function>main</function> függvényben feltöltöm a fát 10000 elemmel, majd az inorder módon bejárom a bináris fánkat, majd felszabadítom a fa pointereit.
+</para>
+<para>
+Az LZW binfa C-ben való megírásában és jobban való megértésében Petrus József Tamás segített és mentorált.
+</para>
+	
     </section>        
         
     <section>
@@ -48,7 +418,7 @@
         <programlisting language="c"><![CDATA[
             void kiir (Csomopont * elem, std::ostream & os)
     {
-        // Nem létező csomóponttal nem foglalkozunk... azaz ez a rekurzió leállítása
+     
         if (elem != NULL)
         {
 
@@ -65,7 +435,7 @@
         <programlisting language="c"><![CDATA[
             void kiir (Csomopont * elem, std::ostream & os)
     {
-        // Nem létező csomóponttal nem foglalkozunk... azaz ez a rekurzió leállítása
+    
         if (elem != NULL)
         {
 	    for (int i = 0; i < melyseg; ++i)
@@ -81,7 +451,7 @@
         <programlisting language="c"><![CDATA[
     void kiir (Csomopont * elem, std::ostream & os)
     {
-        // Nem létező csomóponttal nem foglalkozunk... azaz ez a rekurzió leállítása
+        
         if (elem != NULL)
         {
 
@@ -101,6 +471,9 @@
         <para>
             Megoldás forrása:                
         </para>
+	<para>	
+	Az eredetileg megírt binfa kódját használom jelen megoldásomban , viszont a c-megvalósításban is megteszem ezt, csak ott máshogy közelítem meg , amit le is írok a megoldás végén.
+	</para>
             <para>
                 Az első kódcsipet a postorder bejárást mutatja be.
             </para>
