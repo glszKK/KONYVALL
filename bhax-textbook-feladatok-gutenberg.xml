@@ -1,0 +1,240 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló, Gutenberg!</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+        <cover>
+            <para>
+                Programozás tankönyvek rövid olvasónaplói.
+            </para>
+        </cover>
+    </info>
+<section>
+	<title>Olvasónapló</title>
+		<para>
+		<command>Második Heti Előadás / Első dokumentáció :</command>
+		</para>
+	<para>
+Átfogó leírást kapunk magáról a programkód fogalmáról, felépítéséről.Mi is a forrás,a szintaktikai szabály és a szemantikai szabály.
+	</para>
+<para>
+Fordítóprogram/Interpreter bevezetése a gépi nyelv kapcsán.
+</para>
+<para>
+Tárgyprogram előállításának lépései: 1. lexikális elemzés 2. szintaktikai elemzés 3. szemantikai elemzés 4. kódgenerálás .
+</para>
+<para>
+Minden programnyelvnek megtaláljuk az egyedi sajátosságait egyfajta saját szabványt.(hivatkozási nyelv)
+</para>
+<para>
+Implementáció "problémája".Nincs olyan program amely a hordozhatóságot is magával vonzza , tehát egy implementáció egy másikba való átvitele esetében akkor ott fut ugyanazzal az eredménnyel visszatérve.
+</para>
+<para>
+Mi is az IDE ? - integrált fejlesztői felület/környezet (Integrated Development Enviroment) - belövő / kapcsolatszerkesztő / szövegszerkesztő / futtató rendszer
+</para>
+<para>
+Osztályozzuk a programnyevleket: 1. Imperatív(Algoritmikus - működteti a processzort.)
+2. Dekleratív(Nem algoritmukus) 3.Máselvű(egyéb)
+</para>
+<para>
+Az imperatív: -- program utasítás sorozat -- legfőbb eszkösz : változó(tár közvetlen elérése/értékek manipulálása) -- Neumann-architektúra -- Alcsoportok: 1. Eljárásorienttál nyelv 2. Objektumorientált nyelv  
+</para>
+<para>
+Dekleratív: -- Nem Neumann-architektúra -- nincs lehetőség memóriamáveletekre(korlátozott) -- Alcsoportok: 1. Funkcionális nyelvek 2. Logikai nyelvek
+</para>
+<para>
+Máselvű: -- általában tagadják valamelyik imperatív jellemzőt.
+</para>
+<para>
+Szintaktiaki szabályok formalizálása különböző elemekkel: -- Terminális(íráskép/jelek estén nagybetűk) -- Nem terminális(kisbetűk/több szó esetén alahúzás az elválasztás) -- Alternatíva( jele: | ) -- Opció( [] ) -- Iteráció(előtte álló elem tetszőleges ismétlődése) 
+</para>
+<para>
+Szintaktikai szabályok bal/jobb oldala megkülönböztethető: bal - nem terminális | jobb - tetszőleges elemsorozat 
+
+Nézzünk meg ezek után kettő egyszerűbb kódot , amit már korábban a fejezetek során használtunk , kezdetnek mindenki így kezdi , szóval vessük bele magunkat.
+Egy szimpla "Hello , World !" lesz.
+<programlisting language="c"><![CDATA[
+#include <stdio.h>
+
+int main ()
+{ 
+	printf ("Hello, World!");
+return 0;
+}
+]]>
+</programlisting>
+<programlisting language="c"><![CDATA[
+#include <unistd.h>
+
+int main ()
+{
+write (1, "Hello, Vilag!", 14);
+return 0;
+}
+]]>
+</programlisting>
+Könnyen lehet értelmezni mind a két programot , a write esetében rendszerhívással íratjuk ki , míg a printf a függvénykönyvtárból.A printf() hívja a write()-ot.
+</para>
+<para>
+Úgy érzem , mivel úgy érkeztem ide DE polgárai közé, hogy nem tudtam programozni , a kiadott feladatokat/könyveket olvasva autodidakta módon egész erős kezdő pillérekre lehet állítani a programozás későbbiekben feltárandó forrásainak megértéséhez szükséges tudást.
+</para>
+<para>
+Olvashattunk továbbiakban Turing gépről melyet az első, illetve a generatív nyelvekről , melyekkel már a második Chomskys feladatsorban találkozhatunk.
+</para>
+<para>
+Örülök , hogy a legnépszerűbb programokról tanulok.( 38.dia aradi ) 
+</para>
+<para>
+Kapunk egy kis háttértörténetet ami a C nyelv történelmét illeti.
+Különböző gcc - GNU projectes C illetve C++ fordítók. Azonos kaszton belül.
+</para>
+<para>
+Szabványok / Parancssori használat / Program előállítás / ElF / Program a memóriában
+</para>
+<para>
+Nagyjából , ahogy haladtunk a csokrokkal , ugyanúgy szépen végigoperáljuk a könyvet is és a különböző kódcsipetek egy-egy részletre jobban rávilágíthatnak amelyeket a kijelölt diákon találhatunk meg.
+</para>
+<para>
+Informatika analízis : a változó -- típusokkal találkozunk , ezek lehetnek: char, short, int, long, unsigned, float, double.
+Jó volt látni hány bitet is foglalnak le a különböző típusok . Szépen sorban haladva ahogy írtam , 8-16-32-64-32-32-64-64-bitet foglalnak le a memóriában.
+Ezeket ki is íratjuk melyhez a 'sizeof' lesz a segítségünkre az adott dián. Visszatér a típus értékével.
+</para>
+<para>
+Deklarálások részletesebb leírása.
+</para>
+<para>
+Az első dokumentáció végére labortámogatást kaphattunk szintén a pagerankhez is . 
+Az ötlet alapja , megvalósulása kidolgozása világosabbá válhat számunkra , ha nem csak a csokor leírására hagyatkozunk. Linkmátrix megismerése mely a menőbb oldal kire mutat hogyant akarja egyszerűen ábrázolni , különböző értékekkel.
+</para>
+<para>
+Ezzel az első dokumentációt le is zárhatjuk.
+</para>
+<para></para>
+<para></para>
+
+<para> 
+<command>Harmadik Heti Előadás / Második dokumentáció :</command>
+</para>
+<para>
+Visszatértünk a turing géphez.(szorgos hódok)
+</para>
+<para>
+Nevesített konstans -> egész számok ::= előjel,szám -- előjel::=[-|+] -- szam::=szamjegy{szamjegy} -- szamjegy::= 0|1|2|3|4... (egy kis szintaktikai elemzés)
+</para>
+<para>
+Corba világa
+</para>
+<para>
+Ismételjük a korábbi anyagot, főleg a deklarációra fekszünk rá.Tömbök inicializálása.
+<programlisting language="c"><![CDATA[
+#include <stdio.h>
+
+int main (void)
+{
+	int i , j , tomb2d[3][3] = {{1 , 2 , 3},{4 , 5 , 6},{7 , 8 , 9}};
+		for (i=0; i < 3; ++i)
+		{ for (j=0;j<3;++j)
+			printf ("[%d][%d]=%d \n",i,j,tomb2d[i][j]); }
+return 0; }
+]]>
+</programlisting>
+A mutatók esetében , ha kipróbáltuk a programokat , tökéletesen lehetett látni , hogyan is működnek és kiváló útmutatást adtak a Chomsky feladatsor végén található hasonló feladat típusokhoz , hanem megoldást is szolgáltattak némelyikhez.
+</para>
+<para>
+Typdeffel való ismerkedés.
+</para>
+<para>
+A második dokumentáció végére , a C hatásköre és élettartama maradt.(érvényességi tartomány) - 1. Belső(lokális, automatikus)változók 2. Külső(globális)nevek
+</para>
+<para>
+Lokális vagy globális a környezet dönti el, -- a diasorunk 31. látszik a kettő közötti különség . Szerencsére a példák szemléletesek kellően.
+</para>
+<para>
+Statikus változók / mutatók ismétlése / tömbök ismétlése / címaritmetika
+</para>
+<para>
+Ezeket ahogyan leírtuk ha sorrendben vegighaladunk a dian akkor , mefelelő alapot ad a dinamikus memóriakezelés teljes mértékű megértéséhez.
+</para>
+<para>
+<command>Negyedik Heti Előadás / Harmadik dokumentáció :</command>
+</para>
+<para>
+Kifejezések -> 2 komponens -> értékek/típus
+</para>
+<para>
+Kifejezés összetevői: 
+1. Operandusok(érték) -- 2. Operátorok(érték) -- 3. Kerek zárójelek.
+</para>
+<para>
+Operandus : literál , nevesített konstans , változó , függvényhívás.
+</para>
+<para>
+Operátor : műveleti jelek, az értékkel végrehajtandó műveletet határozzák meg.
+</para>
+<para>
+Kerek zárójelek: műveletek végrehajtási sorrendje , redundáns zárójelek. 
+</para>
+<para>
+Egyoperandus(unáris)/Kétoperandus(bináris)/Háromoperandusú(ternáris)- operátorok
+</para>
+<para>
+Három alakja a kifejezésnek : prefix -- infix -- postfix ( operátor sorrendje milyen )
+</para>
+<para>
+Érték és típus meghatározásának leírása : kifejezés kiértékelése->sorrendben elvégezzük a műveleteket - előáll az érték és a típus hozzárendelődik.
+</para>
+<para>
+Sorrend : bal-jobb , jobb-bal , bal-jobb precedencia táblázat figyelembevételével.
+</para>
+<para>
+Ahol nem egyértelmű , az erőssége az operátoroknak , az esetben a precedencia táblázat fogja megmondani az erő sorrendet. Ahogy haladunk előre a sorokban felvfele úgy egyre erpsebbek.
+</para>
+<para>
+Van kötési irányuk is. bal-jobb vagy jobb-bal
+</para>
+<para>
+Zárójelekkel lehet a legnagyobb prioritást elérni a precedencia táblázatban . 
+Az infix alak átírására lehet igazából ezt a módszert használni.
+</para>
+<para>
+Speciálisak a logikai operátorok.Speciális fordítások.( Fortran / PL/I / Turbo Pascal )
+</para>
+<para>
+Két programozási nyelv eszköztípusa azonos ha : deklaráció egyenértékűség/név egyenértékűség/struktúra egyenértékűség.
+</para>
+<para>
+Típusérzékenység tárgyalása. Labortámogatásnak érzem a Helló, Welch ! csokorhoz , hogy jobban megértsük az operandusokat. A bináris fa működését.
+</para>
+<para>
+Konstans kifejezés, fordítás időben eldől az értéke - operandusai : literálok / nevesített konstansok
+</para>
+<para>
+C - kifejezésorientált nyelv - ennek példái PRECEDENCIA TÁBLÁZAT és az operátorok/hivatkozások.Operátorok jelentésének leírása.
+</para>
+ <para>
+https://www.facebook.com/groups/udprog/permalink/1057129754474913/
+</para>
+</section>
+    <section>
+        <title>Programozási alapfogalmak</title>
+        <para>         
+            <citation>PICI</citation>       
+        </para>
+    </section>        
+    <section>
+        <title>Programozás bevezetés</title>
+        <para>                
+            <citation>KERNIGHANRITCHIE</citation>
+        </para>
+        <para>
+            Megoldás videó: <link xlink:href="https://youtu.be/zmfT9miB-jY">https://youtu.be/zmfT9miB-jY</link>
+        </para>        
+    </section>        
+    <section>
+        <title>Programozás</title>
+        <para>                
+            <citation>BMECPP</citation>
+        </para>
+    </section>        
+</chapter>                
