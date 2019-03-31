@@ -110,6 +110,9 @@
             <para>
                 Az alap eset pedig az inorder , amely a 3. kódcsipet.
             </para>
+	<para>
+	A feladat megoldásához segítséget nyújt még az olvasónapló 3. heti labortámogatása , amely megérteti , hogyan is működik a három eset.
+	</para>
             <para>
                 Az Inorder alapesethez nem nyúltam hozzá , a for ciklussal feldolgozzuk az aktuális elemet , az egyesGyermek esetében 
                 a bal oldalt míg a nullasGyermek esetében a jobb oldalt vizsgáljuk. A Preorder adatszerkezetnél azért veszünk el 
