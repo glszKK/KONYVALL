@@ -1389,6 +1389,34 @@ public:
 ]]>
 </programlisting>
 </para>
+<para>
+A mozgató szemantika a konstruktort , a másolót és a destruktort használja , azaz így kell értelmeznünk a feladatot.A bináris fák mozgatásához másolásához , ismétlődő lépésekből álló műveletsorozaton alapuló tehát rekurzív függvényekre lesz szükségünk.
+</para>
+<para>
+A destruktor alapvetően üres, azt ki kell fejteni,különben a program nem fog lefordulni, azonban a másoló konstruktor, és az "=" operátor nincs értelmezve/kifejtve, mert általában csak az objektumokra mutató referenciát dobaáljuk ide-oda.
+</para>
+<para>
+Destruktor: az objektum törlődése előtti teendőket hajtja végre mint például-> erőforrások felszabadítása.
+</para>
+<para>
+Másoló konstruktor: lefoglaljuk az objektum üzemeltetéséhez szükséges erőforrásokat, majd az objektumunkat egy másik példány másolataként hozzuk létre.
+</para>
+<para>
+= operátor: megsemmisítjük az objektumot, majd létrehozzuk az újat, egy létező példány alapján.
+</para>
+<para>
+A fontos módosításokat a fenti kódcsipeten láthatjuk . 
+Megértéséhez tudjuk , hogy maga a binfa szerkezetét nézve , az "lzwbinfa" osztályon belül beépített a csomópont osztályú objektumok alkotják a fánkat.
+</para>
+<para>
+A mozgató konstruktor esetében túlterheljük az operátort.
+</para>
+<para>
+A másolókonstruktor esetében érték szerint adjuk át a fát nem pedig referencia szerint.
+</para>
+<para>
+A feladat megvalósításához nagy segítségemre volt az alábbi weboldal: <link xlink:href="https://calmarius.blog.hu/2010/11/18/c_dolgok_amelyekkel_sokat_lehet_szivni"></link>
+</para>
     </section>                     
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 </chapter>                
