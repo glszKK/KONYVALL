@@ -213,7 +213,31 @@ Konstans kifejezés, fordítás időben eldől az értéke - operandusai : liter
 C - kifejezésorientált nyelv - ennek példái PRECEDENCIA TÁBLÁZAT és az operátorok/hivatkozások.Operátorok jelentésének leírása.
 </para>
  <para>
-https://www.facebook.com/groups/udprog/permalink/1057129754474913/
+Kifejezések mik is lehetnek ? --> azonosító, karakterlánc, állandó, kulcsszó, elsődleges_kifejezés([kif_lista])], kif_lista::= kifejezés,kif_lista
+<programlisting language="c"><![CDATA[
+#include <stdio.h>
+
+int main () {
+printf("%d\n",printf("%d\n", printf("%d\n", sizeof (char) *8)));
+return 0;
+}]]>
+</programlisting>
+A könyv sikeresen visszakéri az eddig megszerzett tudást időközönként , ami hasznos lehet egy kezdő programozónak , mint amilyen én is vagyok . Ezt a laborkártyák juttatták eszembe melyeket ezen az oldalon találtam meg: https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog1_2.pdf?fbclid=IwAR15WDaninvfEGaUWe15DpusYLUzjoUU3TkBY3uEJzd4YsNMQ7nYSyjezq4
+</para>
+<para>
+A szörnyűségek esetében , nem éri meg nagyon kalandozni , hisz alapvetőnek tűnő hibákkal találkozhatunk , viszont nagyon jó arra , hogy felnyissa a szemünket , mi az amit érdemes azonnal kiszűrni , és ezek elkerülése végett egyfajta metódust betartani , miközben építjük fel programunkat.Némelyik esetben nem feltétlen hibát látunk , csak tanácsot , miért ne úgy csináljuk ahogy az adott kártyán van.Ahol ezekkel találkozhatunk : https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog1_1.pdf?fbclid=IwAR1UO7JCSZCMW1unPvsCJJMKl48TxKaSTsoaF7GUilljOylv2i0WbHOsy0w
+</para>
+<para>
+Dinamikus tárkezelés esetén kis labortáémogatást nyerünk , hogy jobban megértsük talán , hogyan is fog működni a későbbi csokorban található binfa(z3a7.cpp). A tördelés egy bináris fával könnyen meg lehet valósítani.
+</para>
+<para>
+Ághosszak szórásának kiszámítása papíron sokat segít , hogy mégjobban elmélyüljünk az algoritmus megértésében, és ebben is kiváló anyagot kaphatunk kidolgozva papíron a "Labormérés otthon avagy hogyan dolgozok fel egy példát" cikkben.
+</para>
+<para>
+<command>Ötödik Heti Előadás / Negyedik dokumentáció :</command>
+</para>
+<para>
+A tájékozódás nehezen megy , pótolom s majd folytatom , a csoportbvan nem egyértelmű 5. heti anyagok találhatóak.
 </para>
 </section>
     <section>
