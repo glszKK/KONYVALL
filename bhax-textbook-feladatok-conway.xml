@@ -303,7 +303,35 @@ public class game_of_life extends JFrame {
     }
 }]]></programlisting>
         <para>
-        Olyan mint a 7.3-as csak
+     A feladat megoldása során, mivel a 7.3 -as példával kezdtem teljes mértékben annak az alapjait felhasználva írtam át java programnyelv környezetére. Amit tapasztaltam hogy a Java-s verzióban a siklóágyú sokkal szebben megvalósítható mint c++-ban. Ennek az okára sajnos nem sikerült rájönnöm. 
+A program átírása során hasonló módon dolgoztam mint a mandelbrot c++ nagyítóról java nagyítóra való átírásnál.Az fontos , hogy ha futtatni szeretnénk a programból adódóan ha el szeretnénk menteni , akkor "game_of_life.java" legyen a fájlunknak a neve.
+Innen tudjuk majd szépen utána elindítani a játékot.
+Beállítjuk az ablakunkat.
+Szintúgy frissítjuk a sejteket a szabályok szerint amiket lehet látni hol iktatunk be a programunkba, viszont egy kicsit kéynelmesebb talán a java esetében .
+Ezt azt alábbi kódcsipeten láthatjuk.
+<programlisting><![CDATA[
+ArrayList<ArrayList<Boolean>> entities = new ArrayList<ArrayList<Boolean>>();// = ra.entities;
+        int size1 = ra.entities.size();
+        int size2 = ra.entities.get(0).size();
+        for(int i=0;i<size1;i++)
+        {
+            entities.add( new ArrayList<Boolean>());
+            for(int j=0;j<size2;j++)
+            {
+                int alive = 0;
+                
+                if(ra.entities.get((size1+i-1)%size1).get((size2+j-1)%size2)) alive++;
+                if(ra.entities.get((size1+i-1)%size1).get((size2+j)%size2)) alive++;
+                if(ra.entities.get((size1+i-1)%size1).get((size2+j+1)%size2)) alive++;
+
+                if(ra.entities.get((size1+i)%size1).get((size2+j-1)%size2)) alive++;
+                if(ra.entities.get((size1+i)%size1).get((size2+j+1)%size2)) alive++;
+
+                if(ra.entities.get((size1+i+1)%size1).get((size2+j-1)%size2)) alive++;
+                if(ra.entities.get((size1+i+1)%size1).get((size2+j)%size2)) alive++;
+		if(ra.entities.get((size1+i+1)%size1).get((size2+j+1)%size2)) alive++;]]>
+</programlisting>
+Az <function>addMouseListener</function> és az <function>addKeyListener</function> amelyek lekövetik szépen a tevékenységeket , ahogyan azt később is írom a 7.3-as feladatban.Tehát tényleg megkell szokni a sok C illetve C++ után a javának a környezetét. De ha három napon át csak javás kódokat nézel és tanulmányozol a google-ön keresztül ami a feladattal kapcsolatos akkor van esélyünk megírni. Sajnos ez idő alatt mással nem nagyon tudunk foglalkozni.Főleg, hogy sosem írtam még Java programot a könyv előtt.Remélem tudok segíteni valamennyire , hogy a Java nyelvet is megkóstoljuk.
         </para>            
     </section>        
     <section>
@@ -711,10 +739,14 @@ A feladat megoldásához sokat segített és mentorált Petrus József Tamás.
             Megoldás videó: 
         </para>
         <para>
-            Megoldás forrása: <link xlink:href=""></link>               
+            Megoldás forrása: <link xlink:href="https://github.com/nbatfai/esport-talent-search?fbclid=IwAR0n58sBL-LrZ5N9rpC-zftv0CeiWnwqJYBRFmVHZI5qfh11x3xJDaXI0Ks"></link>               
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
+Miután rákerestem a feladat címére , már láthattam hogy a készségfejlesztés lesz a fő szempontja a feladatnak , amely segítheti agyi tevékenységeink fejlesztését, vagy fizikai reflexiós képességek fejlesztésére lesz alkalmas az alábbi program amit láthatunk.Többen is foglalkoznak hasonló tehetségkutatők fejlesztésével , remélem , hogy ez is hasonló akadályok elé fog minket állítani mint az alábbi linken található teszt:<link xlink:href="https://www.humanbenchmark.com/tests/reactiontime?fbclid=IwAR0preUgZP8EL_beoY79H8T3AoIx_iqCUYHkjXeHNzYrx1aB5DIR3v4NdZE"></link>
+</para>
+<para>
+            A "README" szöveges dokumentum a program futtatásához nyújt segítséget melyet a linken keresztül el tudunk érni.Ahogy elindul a programunk négy darab négyzetet fogunk látni, amelyek közepén található egy kék kis karika.Ezen a körön kell tartanunk az egeret lenyomva.A programunknak az alapvető célja , hogy fejlessze erősítse a koncentrációs illetve reakció idős , követési képességeinket.Ezen a kék karikán nekünk nyomva kell tartanunk az egerünknek a bal egérgombját. Ha ez sikerül akkor ráadásképpen bent is kell tartanunk a körben. 
+Ha sokáig sikerül kontrollálni megfelelően a kék körben az egeret az esetben kapunk új ablakokat. Ez a metódus addig tart míg nem esek ki a lendületből és a kék körből . Ugyanis ebben a pillanatban elveszítek egy négyzetet. Ezek a négyzetek ahogy sürűsödnek és mozognak , nem csak eltüönnek vagy megjelennek , hanem képesek elfedni a másikat.Így még nehezebbé téve a felhasználónak a feladatát.
         </para>            
     </section>        
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
