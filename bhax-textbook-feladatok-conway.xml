@@ -49,8 +49,25 @@
             Megoldás forrása: <link xlink:href=""></link>               
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
-        </para>            
+            Az életjátékot John Conway matematikus találta ki. Ez egy "nullszemélyes" játék és a játékos szerepe mindössze annyi , hogy megad egy kezdőalakzatot ,és azután csak figyeli a ez eredményt.Matematikailag ez az úgynevezett sejtatomaták közé tartozik. Bővebb információt a matematikai hátteret illetőn és a szabályokat illetően az alábbi linken lehet találni: <link xlink:href="https://hu.wikipedia.org/wiki/%C3%89letj%C3%A1t%C3%A9k"></link> 
+        </para>    
+<para>
+Mint ahogyan a cikkben is olvashatjuk vannak alapvető szabályok amik a program alapját fogják képezni : 
+</para>        
+<para>
+Első : A sejt túléli a kört, ha két vagy három szomszédja van.
+</para>
+<para>
+Második : A sejt elpusztul ,  ha kettőnél kevesebb , vagy háromnál több szomszédja van.
+</para>
+<para>
+Harmadik : Az új sejt megszületik  minden olyan cellűban , melynek környezetében pontosan három sejt található.
+</para><para>
+Ezek tehát az alappilléreink amikkel dolgoznunk kell, és akkor nézzük is meg , hogyan épül fel a programunk.
+</para>
+<para>
+A programunk lefordítása a következőképp történik: "g++ *.cpp -o sfml-app -lsfml-graphics lsfml-window -lsfml.system"
+</para>
     </section>        
     <section>
         <title>BrainB Benchmark</title>
