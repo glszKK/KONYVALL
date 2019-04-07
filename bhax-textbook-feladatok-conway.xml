@@ -15,11 +15,50 @@
             Megoldás videó: <link xlink:href="https://bhaxor.blog.hu/2018/10/10/myrmecologist">https://bhaxor.blog.hu/2018/10/10/myrmecologist</link>
         </para>
         <para>
-            Megoldás forrása: <link xlink:href=""></link>               
+            Megoldás forrása: <link xlink:href="https://gitlab.com/nbatfai/bhax/tree/master/attention_raising/Myrmecologist"></link>               
         </para>
+<mediaobject>
+			<imageobject>
+				<imagedata fileref="./images/hangya.png" scale="45"/> 
+			</imageobject>
+		</mediaobject>       
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
-        </para>            
+    A Diagram leírása:
+        </para>       
+<para>
+Alapvetően négy osztályból áll a kódunk: 
+</para>     
+<para>
+Typdef
+</para>
+<para>
+Ant
+</para>
+<para>
+AntWin
+</para>
+<para>
+AntThread
+</para>
+<para>
+Az "Ant" osztályban vannak a hangya tulajdonságai.Az "x,y" szokásos első jelölés a sor második pedig az oszlop rendet követik.Ebből a két számból meg lehet határozni a hangyának a pontos helyét, illetve megtudjuk adni a hanygának az irányát is.
+</para>
+<para>
+Az "AntWin" osztályban a a magasság és a szélesség található meg ami maga a felugró ablak.Az "AntThread" osztályt meghívjuk és a más pointerek által jelölt kódcsipeteket.Alapvetően itt adjuk meg neki a celláknak a méretét.Ezekután pedig a billentyűzetünk eseményeit adjuk meg neki amit itt is dolgozunk fel.
+Az ablak bezárását is itt tesszük meg a programban itt írjuk bele és a rajzolást is.A "+AntWin()" függvényünk egy konstruktor és maga ez a konstruktor építi fel az objektumot , a "+~AntWin()" függvény pedig a destruktor.
+</para>
+<para>
+A "Typedef" definiálja az "Ants" típust.
+</para>
+<para>
+Az "AntThread" osztály megvan hívva az "AntWin"-osztályban. A követési útvonalát a hangyáknak itt adjuk meg.A maximális hangyaszámot is megtudjuk egy cellára és megadjuk a feromont amit követnek a hangyák.Itt is mozgatjuk a hangyákat a feromon után.
+</para>
+<para>
+Ha a diagrammon "+" jel van akkor publikus, másik osztályból is láthatjuk, ha pedig "-" jel van akkor nem látható privát.
+</para>
+<para>
+Amiket leírtam fentebb azok tökéletesen lesznek olvashatóak a diában szépen egymás után/alatt.
+</para>
     </section>        
     <section>
         <title>Java életjáték</title>
