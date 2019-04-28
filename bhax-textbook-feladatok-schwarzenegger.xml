@@ -17,25 +17,70 @@
             Megoldás forrása:                
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
-        </para>
-    </section>        
+     		<programlisting>
+	<![CDATA[
+import tensorflow as tf
+(x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
 
-    <section>
-        <title>Szoftmax R MNIST</title>
-        <para>
-            R            
+x_train.shape
+
+# Reshaping the array to 4-dims so that it can work with the Keras API
+x_train = x_train.reshape(x_train.shape[0], 28, 28, 1)
+x_test = x_test.reshape(x_test.shape[0], 28, 28, 1)
+input_shape = (28, 28, 1)
+# Making sure that the values are float so that we can get decimal points after division
+x_train = x_train.astype('float32')
+x_test = x_test.astype('float32')
+# Normalizing the RGB codes by dividing it to the max RGB value.
+x_train /= 255
+x_test /= 255
+print('x_train shape:', x_train.shape)
+print('Number of images in x_train', x_train.shape[0])
+print('Number of images in x_test', x_test.shape[0])
+
+# Importing the required Keras modules containing model and layers
+from keras.models import Sequential
+from keras.layers import Dense, Conv2D, Dropout, Flatten, MaxPooling2D
+# Creating a Sequential Model and adding the layers
+model = Sequential()
+model.add(Conv2D(28, kernel_size=(3,3), input_shape=input_shape))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Flatten()) # Flattening the 2D arrays for fully connected layers
+model.add(Dense(128, activation=tf.nn.relu))
+model.add(Dropout(0.2))
+model.add(Dense(10,activation=tf.nn.softmax))
+
+model.compile(optimizer='adam', 
+              loss='sparse_categorical_crossentropy', 
+              metrics=['accuracy'])
+model.fit(x=x_train,y=y_train, epochs=10)
+
+model.evaluate(x_test, y_test)
+
+image_index = 4444
+plt.imshow(x_test[image_index].reshape(28, 28),cmap='Greys')
+pred = model.predict(x_test[image_index].reshape(1, 28, 28, 1))
+print(pred.argmax())
+print(y_test[image_index])]]>
+		</programlisting>
         </para>
-        <para>
-            Megoldás videó:
-        </para>
-        <para>
-            Megoldás forrása:                
-        </para>
-        <para>
-            Tanulságok, tapasztalatok, magyarázat...
-        </para>
-    </section>        
+<para>
+A programunk funkcióját tekintve az , hogy felismerjen számokat amelyeket kézzel rajzolnak.A TensorFlow egy olyan szoftverkönyvtár,amely  gépi tanulási algoritmusok leírására és végrehajtására hoztak létre.Nagyon széles körben használjuk mint például a robotikában , beszédfelismerésben vagy adatvédelemben akár agykutatásban.
+</para>
+<para>
+Első momentumunk , hogy beiportáljuk a <function>tensorflow ts</function>-t. A <function>tensorflow</function>-nak hála fel tudjuk tölteni az MNIST adatbázisban tárolt adatokat.Az MNIST adatbázisában fel lelhetjük a kélpeket,az ehez tartozó cimkéket , illetve a tesztképeinket és a címkéket eltároljuk  az <function>x_train</function> , <function>y_train</function> , <function>x_test</function> , <function>y_test</function> változóinkban --> <function>x_train = x_train.reshape</function> , <function>x_test = x_test.reshape</function>.Ha ezzel megvagyunk , akkor a következőekben az <function>x_train</function> illetve az <function>x_test</function> értékeit konvertáljuk/megváltoztatjuk <function>float</function> típusúra -> <function>x_train = x_train.astype('float32')</function>. Ezután beállítjuk/normalizájuk az RGB értékeket <function>x_train /= 255</function> , <function>x_test /= 255</function>.Ahoz hogy a neurális hálót fel tudjuk építeni , szükségünk van arra , hogy hat modult hozzáadjunk. Így meg is lesz a "sequential" modulunk.<programlisting>
+<![CDATA[
+model.add(Conv2D(28, kernel_size=(3,3), input_shape=input_shape))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Flatten()) # Flattening the 2D arrays for fully connected layers
+model.add(Dense(128, activation=tf.nn.relu))
+model.add(Dropout(0.2))
+model.add(Dense(10,activation=tf.nn.softmax))
+]]>
+</programlisting> 
+A hozzáadást követően kreáljuk meg a hálót majd fel tanítjuk a hálót.A legvégén megnézzük , hogy mit is tud a háló, amelyek teszteléséhez az elején feltöltött teszképek valamint cimkék lesznek segítségül.
+</para>
+    </section>              
 
     <section>
         <title>Mély MNIST</title>
@@ -49,39 +94,391 @@
             Megoldás forrása:                
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
-        </para>
-    </section>        
+            <programlisting>
+	<![CDATA[
+	from __future__ import print_function
 
-    <section>
-        <title>Deep dream</title>
-        <para>
-            Keras            
+    from tensorflow.examples.tutorials.mnist import input_data
+    mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
+
+    import tensorflow as tf
+
+    def weight_variable(shape):
+      initial = tf.truncated_normal(shape, stddev=0.1)
+      return tf.Variable(initial)
+
+    def bias_variable(shape):
+      initial = tf.constant(0.1, shape=shape)
+      return tf.Variable(initial)
+
+    def conv2d(x, W):
+      return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
+
+    def max_pool_2x2(x):
+      return tf.nn.max_pool(x, ksize=[1, 2, 2, 1],
+                            strides=[1, 2, 2, 1], padding='SAME')
+
+    # Input layer
+    x  = tf.placeholder(tf.float32, [None, 784], name='x')
+    y_ = tf.placeholder(tf.float32, [None, 10],  name='y_')
+    x_image = tf.reshape(x, [-1, 28, 28, 1])
+
+    # Convolutional layer 1
+    W_conv1 = weight_variable([5, 5, 1, 32])
+    b_conv1 = bias_variable([32])
+
+    h_conv1 = tf.nn.relu(conv2d(x_image, W_conv1) + b_conv1)
+    h_pool1 = max_pool_2x2(h_conv1)
+
+    # Convolutional layer 2
+    W_conv2 = weight_variable([5, 5, 32, 64])
+    b_conv2 = bias_variable([64])
+
+    h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2) + b_conv2)
+    h_pool2 = max_pool_2x2(h_conv2)
+
+    # Fully connected layer 1
+    h_pool2_flat = tf.reshape(h_pool2, [-1, 7*7*64])
+
+    W_fc1 = weight_variable([7 * 7 * 64, 1024])
+    b_fc1 = bias_variable([1024])
+
+    h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
+
+    # Dropout
+    keep_prob  = tf.placeholder(tf.float32)
+    h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
+
+    # Fully connected layer 2 (Output layer)
+    W_fc2 = weight_variable([1024, 10])
+    b_fc2 = bias_variable([10])
+
+    y = tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2, name='y')
+
+    # Evaluation functions
+    cross_entropy = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(y), reduction_indices=[1]))
+
+    correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
+    accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), name='accuracy')
+
+    # Training algorithm
+    train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
+
+    # Training steps
+    with tf.Session() as sess:
+      sess.run(tf.initialize_all_variables())
+
+      max_steps = 1000
+      for step in range(max_steps):
+        batch_xs, batch_ys = mnist.train.next_batch(50)
+        if (step % 100) == 0:
+          print(step, sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
+        sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys, keep_prob: 0.5})
+print(max_steps, sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
+]]>
+	</programlisting>
+A programunkban lehet látni , hogy sok kommentet is kapunk melyek segítenek abban , hogy jobban megértsük.
+Ugyan úgy kezdődik a leírás mint az előbb is , tehát importálnunk kell a szükséges modulokat. <function>tensorflow</function>.Definiálnunk kell négy függvényt melyeket a <function>def</function> jelez.Miután megvagyunk ezzel, a neurális hálónak a rétegeit kell létrehozzuk <function>Input layer</function>-<function>Convolutional layer 1</function>-<function>Convolutional layer 2</function>-<function>Fully connected layer 1</function>-ezeket összeszáémolva látjuk , hogy 5 rétegünk van.Tehát öt rétegű maga a neurális háló.Meghatározzuk most a bemenetet , hogyan is akarjuk kiértékelni.Megadjuk , hogy milyen algoritmussal akarjuk feltanítani magát a hálót <function>Training algorithm</function> és milyen lépéselet tegyen meg <function>Training steps</function>.A legvégén a kódunknak pedig megadjuk , hogy minden századik lépésnél/iterációban tesztelje le a háló tudását, hogy rálássunk , hogyan is állunk.
         </para>
+    </section>
+<section>
+        <title>Minecraft-MALMÖ</title>
         <para>
-            Megoldás videó:
+            Megoldás videó: <link xlink:href="https://youtu.be/bAPSu3Rndi8">https://youtu.be/bAPSu3Rndi8</link>      
         </para>
         <para>
             Megoldás forrása:                
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
-        </para>
-    </section>        
-                  
-    <section>
-        <title>Robotpszichológia</title>
-        <para>
-        </para>
-        <para>
-            Megoldás videó:
-        </para>
-        <para>
-            Megoldás forrása:                
-        </para>
-        <para>
-            Tanulságok, tapasztalatok, magyarázat...
-        </para>
-    </section>        
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+           <programlisting>
+	<![CDATA[
+from __future__ import print_function
+# ------------------------------------------------------------------------------------------------
+# Copyright (c) 2016 Microsoft Corporation
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+# associated documentation files (the "Software"), to deal in the Software without restriction,
+# including without limitation the rights to use, copy, modify, merge, publish, distribute,
+# sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in all copies or
+# substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+# NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+# DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+# ------------------------------------------------------------------------------------------------
+
+
+
+from builtins import range
+import sys
+import os
+import random
+import time
+import uuid
+#from PIL import Image
+import json
+import math
+
+# Allow MalmoPython to be imported both from an installed
+# malmo module and (as an override) separately as a native library.
+try:
+    import MalmoPython
+    import malmoutils
+except ImportError:
+    import malmo.MalmoPython as MalmoPython
+    import malmo.malmoutils as malmoutils
+
+
+class MissionTimeoutException(Exception):
+    pass
+
+
+def restart_minecraft(world_state, agent_host, client_info, message):
+    """"Attempt to quit mission if running and kill the client"""
+    if world_state.is_mission_running:
+        agent_host.sendCommand("quit")
+        time.sleep(10)
+    agent_host.killClient(client_info)
+    raise MissionTimeoutException(message)
+
+
+def run(argv=['']):
+    if "MALMO_XSD_PATH" not in os.environ:
+        print("Please set the MALMO_XSD_PATH environment variable.")
+        return
+    #forceReset="true"
+    missionXML='''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+            <Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            
+              <About>
+                <Summary>Hello world!</Summary>
+              </About>
+              
+              <ServerSection>
+                <ServerHandlers>
+                  <DefaultWorldGenerator forceReset="true" />
+                  <ServerQuitFromTimeUp timeLimitMs="30000"/>
+                  <ServerQuitWhenAnyAgentFinishes/>
+                </ServerHandlers>
+              </ServerSection>
+              
+              
+              <AgentSection mode="Survival">
+                <Name>MalmoTutorialBot</Name>
+                <AgentStart>
+                    <Inventory>
+                        <InventoryItem slot="8" type="diamond_pickaxe"/>
+                    </Inventory>
+                </AgentStart>
+                <AgentHandlers>
+                    <ObservationFromFullStats/>
+                    <ObservationFromGrid>
+                        <Grid name="all_the_blocks" >
+                            <min x="-1" y="-1" z="-1"/>
+                            <max x="1" y="2" z="1"/>
+                        </Grid>
+                    </ObservationFromGrid>
+                    <ContinuousMovementCommands turnSpeedDegs="180"/>
+                </AgentHandlers>
+              </AgentSection>
+            </Mission>'''
+
+    malmoutils.fix_print()
+
+    #agent_host = MalmoPython.AgentHost()
+    agent_host = MalmoPython.AgentHost()
+    malmoutils.parse_command_line(agent_host, argv)
+
+    my_mission = MalmoPython.MissionSpec(missionXML, True)
+    my_mission.timeLimitInSeconds( 300 )
+    my_mission.requestVideo( 640, 480 )
+    
+    #my_mission.rewardForReachingPosition( 19.5, 0.0, 19.5, 100.0, 1.1 )
+    
+
+    my_mission_record = malmoutils.get_default_recording_object(agent_host, "saved_data")
+
+    # client_info = MalmoPython.ClientInfo('localhost', 10000)
+    client_info = MalmoPython.ClientInfo('127.0.0.1', 10000)
+    pool = MalmoPython.ClientPool()
+    pool.add(client_info)
+
+    experiment_id = str(uuid.uuid1())
+    print("experiment id " + experiment_id)
+
+    max_retries = 3
+    max_response_time = 60  # seconds
+
+    for retry in range(max_retries):
+        try:
+            agent_host.startMission(my_mission, pool, my_mission_record, 0, experiment_id)
+            break
+        except RuntimeError as e:
+            if retry == max_retries - 1:
+                print("Error starting mission:",e)
+                exit(1)
+            else:
+                time.sleep(2)
+
+    print("Waiting for the mission to start", end=' ')
+    start_time = time.time()
+    world_state = agent_host.getWorldState()
+    while not world_state.has_mission_begun:
+        print(".", end="")
+        time.sleep(0.1)
+        if time.time() - start_time > max_response_time:
+            print("Max delay exceeded for mission to begin")
+            restart_minecraft(world_state, agent_host, client_info, "begin mission")
+        world_state = agent_host.getWorldState()
+        for error in world_state.errors:
+            print("Error:",error.text)
+    print()
+
+    last_delta = time.time()
+
+
+    
+    # main loop:
+    #agent_host.sendCommand( "jump 1")
+    TURN = 0
+    TURN2 = 0
+    JUMP = 0
+    while world_state.is_mission_running:
+        print("New Iteration")
+        
+        if JUMP > 0:
+            JUMP = JUMP - 1
+        if JUMP == 0:
+            agent_host.sendCommand( "jump 0" )
+            JUMP = JUMP - 1
+        agent_host.sendCommand( "move 1" )
+        if math.sin(TURN)/3 >= 0:
+            agent_host.sendCommand( "turn 0.15")
+        else:
+            agent_host.sendCommand( "turn -0.2")
+        print(TURN," ",math.sin(TURN))
+        TURN = TURN + 0.3
+
+        #agent_host.sendCommand( "jump 1" )
+        time.sleep(0.5)
+        world_state = agent_host.getWorldState()
+        y = json.loads(world_state.observations[-1].text)
+        
+        #print(y["all_the_blocks"])
+        dir = ""
+        if y["Yaw"] + 180 < 90:
+            dir="S"
+            print("Facing South")
+        elif y["Yaw"] < 180:
+            dir="W"
+            print("Facing West")
+        elif y["Yaw"] < 270:
+            dir="N"
+            print("Facing North")
+        else:
+            dir="E"
+            print("Facing East")
+
+        blocks = [[],[],[],[]]
+        i=0
+        for x in y["all_the_blocks"]:
+            blocks[math.floor(i/9)].append(x)
+            i = i+1
+
+        
+        
+
+
+        if dir=="S":
+            willjump = False
+            
+            for j in range(0,3):
+                if blocks[1][j] !="air":
+                    willjump = True
+                print(j,blocks[1][j],willjump)
+            if willjump :
+                JUMP = 2
+                agent_host.sendCommand( "jump 1" )
+        elif dir=="W":
+            willjump = False
+            
+            for j in range(0,3):
+                if blocks[1][j*3] !="air":
+                    willjump = True
+                print(j*3,blocks[1][j*3],willjump)
+            if willjump :
+                JUMP = 2
+                agent_host.sendCommand( "jump 1" )
+        elif dir=="E":
+            willjump = False
+            
+            for j in range(1,4):
+                if blocks[1][j*3-1] !="air":
+                    willjump = True
+                print(j*3-1,blocks[1][j*3-1],willjump)
+            if willjump :
+                JUMP = 2
+                agent_host.sendCommand( "jump 1" )
+        elif dir=="N":
+            willjump = False
+            
+            for j in range(0,3):
+                if blocks[1][j] !="air":
+                    willjump = True
+                print(j,blocks[1][j+6],willjump)
+            if willjump :
+                JUMP = 2
+                agent_host.sendCommand( "jump 1" )
+
+        if (blocks[1][2] !="air" and blocks[2][2] !="air" or blocks[1][4] !="air" and blocks[2][4] !="air" or
+            blocks[1][2] !="air" and blocks[2][2] !="air" or blocks[1][4] !="air" and blocks[2][4] !="air"):
+            TURN2 = 2
+
+        if TURN2 >= 0:
+            agent_host.sendCommand( "turn 1" )
+            TURN2 = TURN2 - 1
+        
+
+        '''if blocks[1][5] != "air" or  blocks[1][5] != "grass" or blocks[1][5] != "tallgrass" :
+            JUMP = 2
+            agent_host.sendCommand( "jump 1" )
+            print()
+            print(blocks[1][5])'''
+
+        #print(len(blocks))
+        #print(blocks)
+
+        if (world_state.number_of_video_frames_since_last_state > 0 or
+           world_state.number_of_observations_since_last_state > 0 or
+           world_state.number_of_rewards_since_last_state > 0):
+            last_delta = time.time()
+        else:
+            if time.time() - last_delta > max_response_time:
+                print("Max delay exceeded for world state change")
+                restart_minecraft(world_state, agent_host, client_info, "world state change")
+        for reward in world_state.rewards:
+            print("Summed reward:",reward.getValue())
+        for error in world_state.errors:
+            print("Error:",error.text)
+        for frame in world_state.video_frames:
+            print()
+            #print("Frame:",frame.width,'x',frame.height,':',frame.channels,'channels')
+            #image = Image.frombytes('RGB', (frame.width, frame.height), bytes(frame.pixels) ) # to convert to a PIL image
+    print("Mission has stopped.")
+
+
+if __name__ == "__main__":
+run(sys.argv)
+	
+]]>
+	</programlisting>
+       Ez a platform egy olyan project , aminek hála a mesterséges intelligencia világában végezhetünk különféle kutatásokat.A minecraft használatával is fel lehet dobni a projektet.
+ </para>
+    </section>                     
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 </chapter>                
