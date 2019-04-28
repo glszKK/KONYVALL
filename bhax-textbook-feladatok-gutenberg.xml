@@ -236,31 +236,701 @@ Dinamikus tárkezelés esetén kis labortáémogatást nyerünk , hogy jobban me
 <para>
 <command>Ötödik Heti Előadás / Negyedik dokumentáció :</command>
 </para>
+ <para>           
+Egy nyelv vezérlésátadó utasításai az egyes műveletek végrehajtási sorrendjét határozzák meg.
+Jelenleg a szerkezetekről fogunk tárgyalni . 
+        </para>
 <para>
-A tájékozódás nehezen megy , pótolom s majd folytatom , a csoportbvan nem egyértelmű 5. heti anyagok találhatóak.
+Több utasítás fajtánk is van a C programnyelvünkben melyeknek típusai is vannak. 
+</para>
+<para>
+Ezek : 
+</para>
+<programlisting>
+<![CDATA[*kifejezés utasítás
+*összetett utasítás
+*iterációs utasítás
+*vezérlésátadó utasítás
+*kiválasztó utasítás
+*cimkézett utasítás]]>
+</programlisting>
+<para>
+Kifejezés : 
+<programlisting>
+<![CDATA[x = 0, i++ vagy printf(...)
+x=0;
+i++;
+printf(...)]]>
+</programlisting>
+Utasítássá válik ha egy pontosvesszőt írunk utána, ez az utasítás lezáró jel.A {} kapcsos zárójelekkel deklarációk és utasítások csoportját fogjuk össze egyetlen összetett utasításba vagy blokkba, ami szintaktikailag egyenértékű egyetlen utasítással.
+</para>
+<para>
+If-Else utasítás: Döntés kifejezésére használjuk.
+<programlisting>
+<![CDATA[if \\(kifejezés)
+\\1.utasítás
+else
+\\2.utasítás]]>
+</programlisting>
+Ahol az else rész az opcionális.Ha igaz a kiértékelés akkor az első utasítás, ha nem igaz akkor az else ág hajtódik végre.Az else mindig a hozzá legközelebb eső, else ág nélküli if utasításhoz tartozik.Ha nem így szeretnénk, akkor a kívánt összerendelés kapcsos zárójelekkel érhető el.
+<programlisting>
+<![CDATA[
+if (n > 0) {
+   if (a > b)
+      z = a;
+}
+else
+   z = b;]]>
+</programlisting>
+Az Else-If utasítás:
+<programlisting>
+<![CDATA[if \\(kifejezés)
+   \\utasítás
+else if (kifejezés)
+   \\utasítás
+else if (kifejezés)
+   \\utasítás
+else if \\(kifejezés)
+   \\utasítás
+.
+.
+else
+   \\utasítás]]>
+</programlisting>
+Ez a szerkezet adja a többszörös döntések általános szerkezetét.
+Agép sorra kiértékeli a kifejezéseket és ha bármelyik ezek közül igaz, akkor végrehajtja a megfelelő utasítást, majd befejezi az egész vizsgáló láncot.
+</para>
+<para>
+A Switch utasítás:
+</para>
+<para>
+A switch utasítás is a többirányú programelágaztatás egyik eszköze.Úgy működik, hogy összehasonlítja egy kifejezés értékét több egész értékű állandó kifejezés értékével, és az ennek megfelelő utasítást hajtja végre.
+<programlisting>
+<![CDATA[\\Általános felépítés
+witch \\(kifejezés)
+ {
+   case \\állandó kifejezés: utasítások
+   case \\állandó kifejezés: utasítások
+   .
+   .
+   default: \\utasítások
+}]]>
+</programlisting>
+Mindegyik case ágban egy egész állandó vagy állandó értékű kifejezés található, és ha ennek értéke megegyezik a switch utáni kifejezés értékével, akkor végrehajtódik a case ágban elhelyezett egy vagy több utasítás.Az utolsó, default ág akkor hajtódik végre, ha egyetlen case ághoz tartozó feltétel sem teljesült.A default és case ágak tetszőleges sorrendben követhetik egymást , viszont ha elhagyjuk a default ágat , azaz nincs, akkor nem hajtődik végre semmi sem.
+<programlisting>
+<![CDATA[
+#include <stdio.h>
+
+main( ) /* számok, üres helyek és mások számolása */ 
+{
+   int c, i, nures, nmas, nszam[4];
+
+   nures = nmas = 0;
+   for (i = 0; i < 4; i++)
+      nszam[i] = 0;
+   while ((c = getchar( )) != EOF) {		
+      switch (c) {
+         case '0': case '1': case '2':	case '3':
+            nszam[c-'0']++;
+            break;
+         case ' ':
+         case '\n':
+         case '\t':
+            nures++;
+            break;
+         default:
+            nmas++;
+            break;
+      }
+}
+printf("számok =");
+for (i = 0; i < 4; i++)
+   printf(" %d", nszam[i]);
+printf(", üres hely = %d, más = %d\n", nures, nmas);
+return 0;
+}
+]]>
+</programlisting>
+A break utasítás hatására a vezérlés azonnal abbahagyja a további vizsgálatokat és kilép a switch utasításból.Az egyes case esetek címkeként viselkednek, és miután valamelyik case ág utasításait a program végrehajtotta, a vezérlés azonnal a következő case ágra kerül, hacsak explicit módon nem gondoskodunk a kilépésről.
+</para>
+<para>
+While - For utasítás:
+<programlisting>
+<![CDATA[while \\kifejezés
+	\\utasítás
+]]>
+</programlisting>
+A program először kiértékeli a kifejezést.Ha annak értéke nem nulla (igaz), akkor az utasítást végrehajtja, majd a kifejezés újra kiértékelődik. Ez a ciklus mindaddig folytatódik, amíg a kifejezés nullává (hamissá) nem válik, és ilyen esetben a program végrehajtása az utasítás utáni helyen folytatódik. 
+<programlisting>
+<![CDATA[
+for \\(1. kifejezés; 2. kifejezés; 3. kifejezés)
+   \\utasítás
+ \\ami teljesen egyenértékű a while utasítással megvalósított
+\\1. kifejezés
+while \\(2. kifejezés) {
+   \\utasítás
+   \\3. kifejezés
+}
+]]>
+</programlisting>
+Ciklusszervezés do-while utasítással:
+</para>
+<para>
+A do-while utasítás a ciklus leállításának feltételét a ciklusmag végrehajtása után ellenőrzi, így a ciklusmag egyszer garantáltan végrehajtódik.
+<programlisting>
+<![CDATA[
+do
+   \\utasítás 
+while \\(kifejezés);
+]]>
+</programlisting>
+A gép először végrehajtja az utasítást és csak utána értékeli ki a kifejezést.
+Ez így megy mindaddig, amíg a kifejezés értéke hamis nem lesz, ekkor a ciklus lezárul és a végrehajtás az utána következő utasítással folytatódik.
+</para>
+<para>
+A break és continue utasítások:
+</para>
+<para>
+A break utasítás lehetővé teszi a for, while vagy do utasításokkal szervezett ciklusok idő 
+előtti elhagyását, valamint a switch utasításból való kilépést.A break mindig a legbelső ciklusból lép ki.
+</para>
+<para>
+A continue utasítás a break utasításhoz kapcsolódik, de annál ritkábban használjuk. A ciklusmagban található continue utasítás hatására azonnal (a ciklusmagból még hátralévő utasításokat figyelmen kívül hagyva) megkezdődik a következő iterációs lépés.
+</para>
+<para>
+A goto utasítás és a címkék:
+</para>
+<para>
+A C nyelvben a goto utasítás, amellyel megadott címkékre ugorhatunk.A goto használatának egyik legelterjedtebb esete, amikor több szinten egymásba ágyazott szerkezet belsejében kívánjuk abbahagyni a feldolgozást és egyszerre több, egymásba ágyazott ciklusból szeretnénk kilépni.
+<programlisting>
+<![CDATA[
+for(...)
+   for(...) {
+     
+      if (zavar)
+         goto hiba;
+   }
+hiba:
+   \\a hiba kezelése
+]]>
+</programlisting>
+A szerkezetben előnyös a hibakezelő eljárást egyszer megírni és a különböző hibaeseteknél a vezérlést a közös hibakezelő eljárásnak átadni, bárhol is tartott a feldolgozás.A címke 
+ugyanolyan szabályok szerint alakítható ki, mint a változók neve és mindig kettőspont zárja.
+</para>
+<para>
+A vezérlési utasítások blokkok leírását követően , a függelékre ugorhattunk , ahol még pontosabb rálátást biztosítottak nekünk ezek megértésére.
+</para>
+<para>
+Kifejezés utasítások kieg: 
+</para>
+<para>
+Ebben a blokkban zajlik a legtöbb értékadás vagy függvényhívás. Ha a kifejezés hiánya fenn áll akkor azt null-utasításnak nevezzük.Iterációs utasítások üres ciklusmagjának helyettesítésére vagy cimke helyének kijelölésére is szoktuk használni a kifejezéseket.
+</para>
+<para>
+Cimkézett utasítások kieg:
+</para>
+<para>
+Alapvetően utasításokhoz előtagként megadott :
+</para>
+<para>
+Azonosítóként deklarált azonosítóból áll / goto utasítás alpontjaként használhatjuk csak / érvényességi tartománya az éppen aktuális függvény / nincs tárterülete így nem kerül kapcsolatba más azonosítókkal valamint nem deklarálhatóak újra / nem módosítják önmagukban a végrehajtás sorrendjét.
+</para>
+<para>
+Összetett utasítás kieg:
+</para>
+<para>
+Az automatikus tárolási osztályú objektumok inicializálására a blokkba való minden egyes belépéskor a blokk tetején megtörténik és ugyanakkor sorra feldolgozz a aprogram a deklarációkat is. Ha kívülről egy vezérlés átadó utasítással a blokk belsejébe ugrunk akkor ezek az inicializálások elmaradnak. A static tárolási osztályú objektumok csak egyszer a program végrehajtásának kezdetén inicializálódnak.
+</para>
+<para>
+Kiválasztó utasítások kieg: 
+</para>
+<para>
+A végrehajtási sorrendek egyikéát választják ki.A C nyelv a kétértékűséget azzal oldja fel , hogy az else mindig az azonos blokkon belüli utolsó else nélküli if utasításhoz kötődik.A switch által vezérelt alutasítások tipikusan összetett utasítások.A switch utasítás végrehajtásakor a kifejezés az összes mellékhatást beleértve kiértékelődik és összehasonlításra kerül az egyes else case részek állandóival.Ha a switch utasítás tartalmaz default cimkét akkor a vezérlés is default cimke utasítás utáni címre adódik át.
+</para>
+<para>
+Iterációs utasítások kieg:
+</para>
+<para>
+Egy ciklust határoznak meg.A három kifejezés bármelyike elhagyható. A második kifejezés hiánya esetén a for ellenőrző része úgy működik mintha az ellenőrzés egy nem nulla értékű állandóvaé történne.
+</para>
+<para>
+Vezérlési utasítások kieg: 
+</para>
+<para>
+A vezérlésátadó utasítások a vezérlés feltétel nélküli átadására alkalmasak.A goto utasítást manapság már nem használjuk , ezt az előadásból is megtudhatjuk.A break utasítás csak ciklusszervező vagy switch utasításban jelenhet meg. A ciklusmagot alkotó utasítás a break hatására befejeződik, így a vezérlés a vezérlést lezáró utasítást követő utasításra adódik.A return utasítás hatására tér vissza a függvény a hívó eljárásba.Ha nincs return akkor nincs visszatérési érték definiálva.
+</para>
+<para>
+A "KERNIGHAN-RITCHIE" féle könyvől ezzel le is zártuk a vezérlésátadó utasításokat tartalmazó beszámolónkat és ugorhatunk tovább a "Levendovszky - Szoftverfejlesztés C++" nyelven című könyvünk 5. heti előadásához tartozó anyagához.
+</para>
+<para>
+A bevezetésben egy általános tájékoztatást kaptunk arról , mikor , hogyan , és kik fejlesztették a C nyelvet tovább hogy C++ legyen.A C részhalmaza a C++-nak viszont a C++ már többmindent támogat , mint például - memóriakezelés/párhuzamos programozás.
+</para>
+<para>
+Az C++ nem objektumorientált újdonságai : C / C++ nyelv 
+</para>
+<para>
+Függvényparaméterek/Visszatérítési érték :
+</para>
+<para>
+A paraméterek definiálása a két nyelven eltérő - C++ -ban tetszőleges számú is lehet a paraméter ellenben nem támogat alapértelmezett visszatérítési típust.A main függvény szintén két típusú lehet. Egyik a standard : 
+<programlisting><![CDATA[
+int main()
+{......}]]></programlisting>
+Másik pedig:
+<programlisting><![CDATA[
+int main(int argc , char * argv[])
+{.......}]]></programlisting>
+</para>
+<para>
+Korábbi feladataink során is találkozhattunk minkét típussal. Ugye az argc a parancssori argumentumoknak a száma az argv pedig maguk a parancssori argumentumok.
+A return 0; a sikeres lefutást szimbolizálja.
+</para>
+<para>
+Ahogy haladunk tovább eljutunk a könyben a Bool típushoz , mely a logikai igaz/hamis (true/false)
+<programlisting><![CDATA[ bool success = false; ]]></programlisting>
+A logikai értéknek a típusa int vagy enum . A boolnak hála a kód olvashatóbb lesz valamint a túlterhelésre is alkalmas lehet.Automatizált numerikus formában a 0 - hamis / 1 - igaz értéket adja.A bool,false,true a C++-ban kulcsszavak.
+</para>
+<para>
+A C-stílusú több bájtos stringek enyhe bemutatásáról olvashatunk amit a könyvben a későbbiekben fogunk részletesen kitárgyalni, így arról jelen résznél az olvasónaplónkat sem tudjuk bővíteni.
+</para>
+<para>
+A Változódeklaráció mint utasítás a következő
+</para>
+<para>
+A változót közvetlenül az előtt deklaráljuk ahol fel szeretnénk használni.Így jobban átláthatjuk a kódunkat majd foglalkozhatunk annak hatókörével.Ahol használjuk őket az adott blokkban , ott érvéneyesek. 
+</para>
+<para>
+Függvénynevek túlterhelése
+</para>
+<para>
+A függvény a C++ nyelvben a nevük és az argumentumlistájuk együttesen azonosítja.Ennek köszönhetően azonos nevű függvényeink is lehetnek, ha az argumentumlistájuk alapján megkülönböztethetőek egyértelműen.
+</para>
+<para>
+Megismerkedhetünk a névelferdítéssel ami a függvényeket kiegészítik elő vagy utó taggal, amely tagok az argumentum típusaiból keletkeztek.Ezek linker szinten különböző névvel jelennek meg.
+</para>
+<para>
+Alapértelmezett függvényargumentumok
+</para>
+<para>
+A függvények argumentumainak alapértelmezett értéket adhatunk C++-ban így azzal együtt is kerül meghívásra.
+<programlisting>
+<![CDATA[
+void CreateWindow(char* caption, int x = 100 , int y = 100){....}
+int main()
+{
+CreateWindow("Hello World!", 200 , 200);
+CreateWindow("Hello World!");
+CreateWindow("Hello World!", 200);
+}
+]]>
+</programlisting>
+Tételezzük fel , hogy ez egy ablakot hozna létre. 3 paramétere van a fejléc , az x és y - amelyekben az ablakunk képernyő koordinátáit lehet megadni.Az alapértelmezett a 100 , míg ugye a caption paraméternek nem adtunk értéket.A mainben vannak különböző módok ahogy a függvényt meghívhatjuk. Az első esetben minden argumentumnak adunk értéket amelyek a függvény paraméterei is lesznek egyúttal.A második sor az alapértelmezett értékeket cipeli, a harmadik pedig az x értéket a mi általunk megadott értékre van beállítva az y pedig cipelve van.
+</para>
+<para>
+Ezen argumentumok felhasználására szabályok is vannak:
+</para>
+<para>
+1 - Hátulról előre folytatólagosan van csak lehetőség alapártelmezett értékek megadására az argumentumlistában. 2 - hátulról előre hagyhatóak el az argumentumok az argumentumlistában. 3 - Az alapértelmezett argumentumok , nem adhatóak meg a függvénydeklaráció és a függvényhívás helyén egyidejűleg.Csak az egyiknél lehet.
+</para>
+<para>
+Paraméterátadás referenciatípussal
+</para>
+<para>
+Ha szeretnénk , hogy a függvény megváltoztassa a paraméter értékét, akkor mechanikus átalakítást kell végeznünk.Sokféleképpen tudjuk megoldani hogy változó címet adjunk át. Erre a Chomsky csokor , utolsó feladata a legjobb példa, ahol rengeteg ehez hasonló máveletet végzünk , és játszunk a pointerekkel/referenciákkal és különféle mutatókkal.
+</para>
+<para>
+A C++ program tulajdonképpen ugyanazt eredményezi , mint a C program amely pointereket használ viszont nem kell változó címeket képeznünk ami nagy segítség , hisz a szintaxisunk azonos lehet egy int típusú változóval is akár. Nagyon fontos , hogy a referenciát inicializáljuk a referencia típusának megfelelő változóval, másképp hibaüzenetet kapunk.
+</para>
+<para>
+<programlisting>
+<![CDATA[
+int x;
+int& r = x; 
+int* p1 = &x;
+int* p2 = &r;
+]]>
+</programlisting>
+A p1 és p2 megegyezik , hisz mindkettő az x változó címét tartalmazza. A referencia címe a hivatkozott változó címe.
+</para>
+<para>
+Ritkán szoktunk hivatkozni egy változóra referenciával , mert átláthatatlanná teszi a kódunkat.Hisz az esetben egy változóra több szimbólummal is hivatkozunk.
+</para>
+<para>
+A C++-ban a cím szerinti paraméterátadást referenciákkal valósítjuk meg , így gyakran nevezzük ezt referencia szerinti paraméterátadásnak.A kötelező értékadás a függvényparamétereknél automatikusan teljesül a kezdeti értékeknél és a referencia megváltoztatása a változó megváltoztatását eredményezi.Probléma lehet ha a programbana  függvény referenciával tér vissza.
+</para>
+<para>
+Ha a veremből kiveszünk egy elemet az esetben csak a verem tetejét módosítjuk és a felszabadult területet nem. Megjegyezhetjük , hogy csak a függvénynek átadott argumentum könnyű megváltoiztathatósága a referenciénak csak az egyik almalmazási területe mert ha élünk a lehetőséggel akkor a referencia szerinti paraméterátadás esetén cím szerint adjuk át az argumentumot , nagyméretű argumentumok esetén teljesítménynövekedést érhetünk el, ha csak az argumentumok címét adjuk át és nem copyzzuk le őket.
+</para>
+<para>
+Ezzel le is zártuk az 5. heti előadás tananyagát és ugorhatunk a következő fejezetekhez.
+</para>
+<para>
+<command>Hatodik Heti Előadás / Ötödik dokumentáció:</command>
+</para>
+<para>
+A következőben megismerkedhetünk az objektumorientált programozással - objektumokkal és osztályok C++ implementációjával.
+</para>
+<para>
+Az osztályok megkönnyítik az átláthatóságát egy programnak és kevésbé lesz az adott programunk bonyolult. Ekkor be is vezetik és elnevezik egységbezárásnak ezt az alapelvet , ahol a záró adatstruktúra neve osztály lesz.Egy kategóriát/csoportot fog ezáltal definiálni.
+</para>
+<para>
+Az objektumok lesznek az úgymond felhasznált elemek/példányok.Mivel az adott objektumokra vigyáznunk kell, annak belsejéhez nem engedjük , hogy a programunk külső egységei/részei hozzáférhessenek.Ezt a műveletet adatrejtésnek hívjuk.Ennek a komplexitás kezelésében van nagyon fontos szerepe.
+</para>
+<para>
+Általánosításnak illetve specializációnak is kritikus szerepe lehet.A speciális osztályról elmondható , hogy birtokolja az általános osztály tulajdonságait és annak műveleteit, így kijelenthetjük , hogy úgymond örökli azokat.
+</para>
+<para>
+A másik tulajdonságot behelyettesíthetőségnek nevezzük - tehát a speciális osztály bármely objektuma bárhol felhasználható ahol az általános osztály objektuma - speciálisok helyettesíthetik az általánosabbikat.
+</para>
+<para>
+Megismerkedünk a típustámogatás fogalmával ami lényegében , hogy  a felhasználó által definiált típusok supportolhatnak operátorokat és típuskonverziót.Ezzel a gondolkodásmóddal lényeges teljesítmény csökkenést érhetünk el.
+</para>
+
+<para>
+Egységbe zárás C++-ban
+</para>
+<para>
+A BME-s könyvünk 20. oldalán találunk egy példaprogramot amelyen szemléltetjük, hogyan is működik.A program a koordinátarendszerben dolgizik , különféle műveleteket végez.Látjuk , hogy a két függvény kapcsolódik a két koordinátához mint ahogy amguk a koordináták is.Ezért a struktúra egységévé tesszük őket. A 21. oldalon láthatjuk a megfelelő programot ami szemléleteti az egységbezárást.Így tagfüggvényeink lesznek.A tagváltozót attributumnak a tagfüggvényt metódusnak/műveletnek nevezzük.
+</para>
+<para>
+Tagváltozók
+</para>
+<para>
+A C és a C++ közötti különbség , hogy a C-ben a struktúra memóriaképét az egyes adattagok egymás után helyezve alkotják míg a C++-ban ez nem megy végbe mindig.Lehet , hogy el kell tárolnunk nagy mennyiségű adatot a tagváltozók után, így a memóriakép fizikai felépítését nem használhatjuk ki.
+</para>
+<para>
+Tagvüggvények
+</para>
+<para>
+Kétféle módon adhatjuk meg. Osztálydefinícióban vagy pedig struktúra definíción kívül.
+A prototípust és a függvény deklarációját a struktórafdefiníción belül míg a függvénytörzset az osztálydeklaráción kívül adjuk meg.A névütközést elkerülve a hatókör operátort fogjuk felhasználni , amit általánosan dupla kettőspont jelöl.Ezt a függvény neve elé szoktuk felírni.A tagfüggvények egy példányban jönnek létre a memóriában.A függvény onnan tudja melyik adattag változóját kell módosítani , hogy van egy láthatatlan első paraméterünk, ami megkapja a módosítandó struktúrát.Ezt a láthatatlan paramétert úgy érjük el , hogy van egy bizonyos kulcsunk rá ( a neve az bármi lehet , mi adjuk meg )  és ezt egy ..* típusú mutatóként kezelhetünk.Mivel az argumentumok és a lokális változó nevei nagyobb prioritással bírnak mint a tagváltozó nevei elrejtik az azonos nevű tagfügvények és argumentumok elől.
+</para>
+<para>
+Adatrejtés
+</para>
+<para>
+A változó adattagjait csak a tagfüggvényből szeretnénk , hogy el lehessen érni és kívülrő nem , akkor ennek megoldására van egy "private" kulcs szavunk amelyet a struktóra definíciójában helyezünk el.Ezek csak az osztályon belül lesznek láthatóak.A private ellentéte a public azaz nyilvános.Azaz bárhonnan elérhető , más struktúrákból vagy globális függvényekből is.Gyakorlati szituációkban a tagváltozók általában privátak amelyeket kívülről függvényekkel változtathatunk.Ez azzal jár , hogy kényszerfeltételek szerepelnek benne , amiket tagváltozók módosításakor csak függvényekkel tudunk ellenőrizni.Az osztály és a struktóra közti különbség csupán az alapértelmezett láthatóságban rejlik.Az osztály egy típus amit ha fel szeretnénk használni , akkor abból változót kell deklarálnunk.Ezt az adott osztály példányosításának nevezzük.Ennek eredménye az osztály egy példánya amit objektumnak nevezünk.Fontos , hogy egy osztályt más osztály is fel tudjon használni , így előzzük meg , hogy a .h állományunk által tartalmazott osztálydefiníció többször is be legyen építve a forrásállományunkba.Ezt a #ifndef -el érjük el.
+<programlisting>
+<![CDATA[
+// Point.h
+
+#ifndef POINT_H
+#define POINT_H
+
+class point
+{
+unsigned int x;
+unsigned int y;
+
+public:
+	int setX(unsigned int value);
+	int setY(unsigned int value);
+	unsigned int getX{return x;}
+	unsigned int getY{return y;}
+};
+#endif /* POINT_H */]]>
+</programlisting>
+Azaz ha még nem definiáltuk a POINT_H makrót akkor ezt tegyük meg , és beépítjük az osztálydefiníciót.Amikor már másodjára építjük be a Point.h állományt  akkor már definiálva lesz a POINT_H makró és a feltétel kiszűri az osztálydefiníciót.Ez azért is kell mert így már nem ad hibaüzenetet a fordító a sokszor felhasznált definíció miatt.
+</para>
+<para>
+Konstruktorok / Destruktorok
+</para>
+<para>
+Korábbi fejezeteinkből szerzett tapasztalataink alapján megállapíthatjuk , hogy objektumaink mostmár csak egy helyen sérülhetnek és az a létrehozásuknál jelentkezhet.
+<programlisting>
+<![CDATA[
+int main ( int argc, char* argv[])
+{
+// létrehozzuk az objektumot
+Point p1; // példányosítjuk a point osztályt
+draw(p1.getX(),p1.getY());
+...
+}
+]]>
+</programlisting>
+Az objektumunk létezésétől kezdve nem adtunk értéket a tagváltozónak, ezért azok véletlenszerű értéket tartalmaznak.Ahoz hogy inicializálni tudják magukat , anélkül , hogy mi megadnánk neki bármilyen értéket , a konstruktor fog nekunk segíteni.
+</para>
+<para>
+A konstruktor olyan speciális tagfüggvény amelynek a neve azonos az osztálynak a nevével valamint a példányosításkor automatikusan meghívódnak.A konstruktort futtatnunk kell,amivel meg is hívodik.Nem úgy mint egy függvényt , hanem csak az automatikus meghívódását "erőltetjük".(Konstruktor Tagfüggvényhez hasonlóan ne hívjunk meg , mert a működése teljesen más lesz , mint amit alapvetően a tagfüggvénytől várunk az adott programunkban.) A konstruktor kinullázása egyszerűen megy , amennyiben adott értékeket szeretnénk , hogy képviseljen akkor adott helyzetben akár plusz függvények hívásába is kerülhet. Mint például: 
+<programlisting>
+<![CDATA[
+Point p; // meghívjuk a konstruktort
+p.setX(3); // értéket állítunk
+p.setY(4); // értéket állítunk
+]]>
+</programlisting>
+Ez negatív értelemben befolyásolja a hatékonyságot.A konstruktort is túl tudjuk terhelni.Tehát ha először lenullázzuk majd értéket adunk neki , az nem feltétlen jó.Ezáltal több eltérő paraméterlistájú konstruktort is megadhatunk.A konstruktor paramétereit a létrehozáskor azonnal megadhatjuk , lásd:
+<programlisting>
+<![CDATA[ Point p(3,4);]]>
+</programlisting>
+Amennyiben argumentum nélküli konstruktort szeretnénk hívni akkor el kell hagynunk a zárójeleket , ez fontos lépés.(az üres zárojelek nem megengedettek).Az argumentum nélküli konstruktor az alapértelmezett konstruktor,azaz az egyargumentumú konstruktoré - konverziós konstruktor.Ha mi nem is írunk konstruktort , maga az osztály tartalmaz egy alapértelmezett konstruktort, viszont ez nem csinál semmit.A beépített típusoknak is van konstruktoruk, ezt használjuk az inicializáláshoz.Amíg az inicializálást a konstruktor végzi el, addig az objektumok által birtokolt erőforrások felszabadítását a DESTRUKTOR.A Destruktor egy ~ jellel kezdődik ami után közvetlen az osztály neve jön.Nincs paramétere és nem kötelező.Ha az objektum megszűnik akkor érkezik a destruktor.
+</para>
+<para>
+Dinamikus adattagot tartalmazó osztályok
+</para>
+<para>
+Dinamikus memóriakezelés
+</para>
+<para>
+A C-ben a malloc/free valamint ezek különböző fajtaikkal tehetjuk meg.C++-ban a malloc csak a lefoglalandó terület bájtokban megadott méretét tudja megmondani.Az operátor felelős a dinamikus memóriakezelésért, ennek a neve new.Osztályokat is példányosíthatunk vele.A delete operátor meghívja a felszabadítandó operátor destruktorát.Tömbök lefoglalása: new[] , a delete[] pedig felszabadít.
+Ha nem használjuk az fentebb ezen részhez tartozó operátorokat , akkor memóriaszivárgás lehet az eredménye.Amennyiben nem dinamikus tömb esetében használjuk , akkor nem lesz definiált.Kivétel ha a pointer 0 értékű.
+</para>
+<para>
+Dinamikus adattagok támogatása
+</para>
+<para>
+BME-s könyvünkben megismerkedünk a FIFO feladattal/osztállyal. Ez az eddig tanult elemeket felhasználva , magyarázza el nekünk mi is történik . Ezt megtaláljuk a 35-36-37. oldalon. Hogyan is növeljük-csükkentsük a méretet , ideiglenes pointerek felhasználása, új elemek hozzáfűzése.
+Van egy eset ahol elképzelhető , hogy a tároló üres, ez esetben a data értékét NULL-ra kell - a count értékét pedig nullára kell állítanunk.
+</para>
+<para>
+Másoló konstruktor
+</para>
+<para>
+A FIFO-s feladatnál a tagfüggvényt másoló konstruktornak hívjuk. Ez rendelkezik általánosan az összes olyan lehetőséggel mint a konstruktor.Amikor megkreáljuk akkor inicializáljuk vele az objektumainkat.Az újonnan létrehozott objektumot méár korábbról egy meglévő objektum alapján inicializáljuk ,hisz másolatot szeretnénk létrehozni.Másik funkciója a másoló konstruktornak , amikor érték szerint adunk át függvényparamétert.A másolás beépített típusok esetén szerencsére egyszerű.
+Például , amikor a pointerhez érkezik , akkor mindent lát , tehát tudja hogy mondjuk 32 bites az érték, annak címét, és cakkompakk mindennel együtt átmásolja tartalmát
+</para>
+<para>
+Bitenkénti másolás neve - sekély másolás
+</para>
+<para>
+Dinamikus adattagok másolásának neve - mély másolás
+</para>
+<para>
+BME könyv 41-42. oldala mutatja meg , hogyan is működnek a legutóbb említett másolások.
+</para>
+<para>
+Friend függvények / osztályok
+</para>
+<para>
+Itt ismerjük meg hogy lehetőségünk van rá , hogy a globális függvényeket illetve a más osztályok tagfüggvényeit autorizálja arra , hogy saját protected tagváltozóihoz és tagfüggvényeihez hozzáférjenek.Ennek lehetőségeivel ismerkedünk meg.
+</para>
+<para>
+A friend (mint barát) függvényeknek nevezzük azokat amelyek a védett tagokhoz hozzáférnek.Bármilyen hozzáférést megkap.BME 44-45. oldal egy kiváló példa erre .
+Hozzáférünk a privát taghoz, deklaráljuk a point osztályt , mert a Specpoint konstruktorában hivatkozunk rá.
+</para>
+<para>
+A friend osztályok hasonlóak mint a friend függvények , ellenben ez egy másik osztályt és nem függvényt hatalmaz fel arra , hogy hozzáférhessen védett tagjaihoz.Ez lesz a friend osztály. 46.-oldalon kapunk rá egy szemléletes kódcsipetet. " friend class FriendClass;" a class point-on belül.A friend tulajdonás nem öröklődik, illetve nem tranzitív.
+</para>
+<para>
+Friend viszony tulajdonságai - gyakorlatban ritkan indokolt ezek felhasználása.
+</para>
+<para>
+Tagváltozók inicializálása
+</para>
+<para>
+Míg az inicializálás a változók és objektumok létrehoizásához fűződik.Ez = értékadást jelent, azaz egy már létező változónak / objektumnak adunk új értéket.
+</para>
+<para>
+inicializálási lista - a tagváltozókat iniciálizáljuk ebben ( zárójel után ":" ) 
+</para>
+<para>
+Statikus tagok - Statikus tag-változók --  az adott osztályhoz nem pedig az osztály objektumaihoz tartoznak -- minden objektuméra közös értéket vesznek fel -- ezek definiálására a static-ot használjuk -- 
+<programlisting>
+<![CDATA[(1) static int sx; ]]>
+<![CDATA[(2) int A::sx = 1]]>
+<![CDATA[(3) printf("%d\n", A::sx);]]>
+</programlisting>
+1: önmagában nem jelent helyfoglalást -- 2: definiáljuk a változót osztályon kívül, a hatókör operátorral jelezzük , melyik osztályhoz tartozik az adott statikus változó. -- 3:ki íratjuk ( az sx minden objektumra közös ) 
+</para>
+<para>
+Satikus tagfüggvény -- osztály nevén keresztül is használható -- statikus tagváltozókon dolgoznak. Erről nem érhető el ami nem statikus !! BME - 52-53. oldal példa !
+</para>
+<para>
+Beágyazott definíciók
+</para>
+<para>
+Enumeráció - osztály - struktúra - Típusdefiníciók -- osztályondefiníción belüli megadása.--> ezek a beágyazott definíciók. BME - 55-56. oldal példa !! kiválóan foglalják össze a feladatok szintúgy mint korábban az eddig tanultak alapait.
+</para>
+<para>
+<command>Hetedik Előadás / Hatodik dokumentáció</command>
+</para>
+<para>
+Haladunk és tanulunk tovább , jelent leírásban - 1  a másodlagos belépési pontok - 2 paraméterkiértékelés - 3 paraméterátadás - 4 blokk
+</para>
+<para>
+1: Ne csak a fejben , hanem esetlegesen a törzsben legyen a belépési pontunk , ez lenne a másodlagos belépési pont.A törzsnek csak egy része hajtódik végre. Ha függvény esetéről van szó akkor a típusnak meg kell egyeznie másképp nem megy.
+</para>
+<para>
+2: Alprogramaink egymáshoz rendelődnek , mindig az aktuális paramétert rendeljük a formálisakhoz.Ezeknek vannak főbb lépései , számszerint három.
+1- melyik formális paraméterhez melyik tartozik/ fog hozzárendelődni? - sorrendi=név szerinti kötés --: sorrendi kötést illetően a formális paraméterekhez a felsorolás listájának megfelelően rendelődnek hozzá az éppen aktuális paraméterek. Tehát első - első második - második harmadik - harmadik .. és így tovább haladhatunk.
+2-Mennyi aktuális paramétert adjak meg? - ha a formális paramétereinknek a száma fix akkor a listánk adott számú paraméter mennyiséget foglal magába/tartalmaz.Ilyenkor kétféleképpen értékelődnek ki.
+első : aktuális = formális paraméterek / második : aktuális paraméterek széma kisebb mint formális paraméterek.Elképzelhető olyan eset is amelyben a formális paraméterek száma nem fixált hanem szabadon választott.Lehet alsó korlát is.
+</para>
+<para>
+3- Mi a viszony a formális-aktuális paraméterek típusai között?
+Az aktuális paraméter típusa egyezzen meg a formáliséval.Ellenben egyes esetekben az aktuálisnak kellene konvertálhatónak lennie , hogy abból formális lehessen.
+</para>
+<para>
+3:érték szerint - cím szerint - eredmény szerint - érték/eredmény szerint - név szerint - szöveg szerint : ezekről részletesen téárgyaltunk már chomsky esetében és a hivatkozási nyelvek esetében is.
+</para>
+<para>
+4: Ez egy olyan programegység amely csak más egységen belül helyezkedhet el.Külső szinten nem lehet.Van kezdete-törzse-vége.
+</para>
+<para>
+Operátorok és túlterhelésük
+</para>
+<para>
+Korábban már beszéltünk az operátorokről most ismét visszatértünk hozzájuk általánosságban. ( összeadás mind egész mind lebegőpontosra akár.. ) ( komplex , akár mátrixok , szorzás ) C++ nyelven ezeket tulterheléssel meg tudjuk oldani.
+</para>
+<para>
+Műveleti sorrend  leírását a precedenciatáblázatban  találjuk.Ezek speciális szabályrendszerek.Zárójelek nélkül nem folgozunk velük.
+</para>
+<para>
+Függvényszintaxis túlterhelés
+</para>
+<para>
+Hasonló operátorokkal találkozhatunk a mandelbrotnál , vagy a welch csokrunkban , ahol mind komplex mind egyszerűbb számokkal kellett dolgoznunk . Humán genom szempontjából pre-in-postorderes megoldást igénybevéve.
+</para>
+<para>
+Csak hogy egy komplexebb példánk is legyen: 
+<programlisting>
+<![CDATA[
+c = a + b // hagyományos, operátor írásmód
+c = operator+(a , b) // az = operátor-, a + függványszintaxissal
+operator=(c, operator+(a , b)); // függvényszintaxis]]>
+</programlisting>
+Int esetén ezek nem fordulnak le.Beépített típusokra nem is hasznalhatjuk ezt a fuggvenyszintaxist.Az operátorok speciális függvények és a függvénynevek túlterhelhetőek , a függvényekhez hasonlóan az operátorok neveit is túlterhelhetjük ezáltal.Nem szabad elfelejtenünk mit is tanultunk a globális/tagfüggvényekről.
+</para>
+<para>
+<command>Nyolcadik Heti Előadás / Hetedik dokumentáció</command>
+</para>
+<para>
+Vermek (verem) / Dupla lebegőpontosok verme (double) / Logikaiak verme (bool) / Stringek verme (std::string) / osztálysablon definíció-logikai (típus) / Osztálysablon definíció-egész(típus) / Vermek verme (típus)
+</para>
+<para>
+Belső(lokális, automatikus) változók
+</para>
+<para>
+Külső(globális) nevek -- ( laborkártyák )
+</para>
+<para>
+Ismátlünk ismét az anyagban, illetve szót ejtünk a hatáskörről.
+Ez a nevekhez tartozó fogalom. A program szövegünknek azon része ahol az adott név ugyanazt a megegyező programozási eszközt hivatkozza.Mindene azonos.
+</para>
+<para>
+Ezen a héten igazából a hatodik heti előadáshoz kapunk egy kis kiegészítést , amelyről részletesen a hatodik heti előadás ötödik dokumentációjában tárgyaltunk. Kiegészítve mindegyik hatáskörének a tisztázásával.
+</para>
+<para>
+<command>Kilencedik Heti Előadás / Nyolcadik dokumentáció</command>
+</para>
+<para>
+INPUT/OUTPUT - I/O - a nyelvek között ezek azok amik a leginkább eltérnek egymástól.
+Platform , operációs rendszer- , implementációfüggő.Ez az az eszköszrendszer amely a perifériákkal való kommunikációt teszik lehetővé. Ez az adatfolyam az operatív tárból érkezik vagy épp oda vár adatokat.Az I/O középpontjában az állomány áll.
+</para> 
+<para>
+Az állomány funkció szerint lehet - input - output - input-output.
+Adatok mozognak a tár és a periféria között.Ezekben van egyfajta ábrázolási mód melyhez hozzá tartozik a kérdés , hogy az adatmozgatási közben történik-e a konverzió.?
+</para>
+<para>
+Ahoz hogy a nyelvekben tudjuk , hogy a reprezentáló bitsorozatból a folytonos karaktersorozatban melyik helyen és hány karaktert alkotva jelenjen meg az egyedi adat három alapvető eszközrendszer alakult ki.
+</para>
+<para>
+formátumos módú adatátvitel / szerkesztett módú adatátvitel / listázott módú adatátvitel
+</para>
+<para>
+Ha egy programban állományokkal akarunk dolgozni akkor ezeket kell végrehajtanunk: 
+- Deklaráció - Összerendelés - Állomány megnyitása - Feldolgozás - Lezárás
+</para>
+<para>
+Implicit állományok is vannak ( írás-olvasás )
+</para>
+<para>
+Különféle nyelveknek vannak I/O eszközei - FORTRAN/COBOL/PL,I/PASCAL/C/ADA nyelveknek.
+</para>
+<para>
+BME C++ könyvől is kapunk megfelelő tájékoztatást ezen rész tanulmányozásához: 
+C++ I/O alapjai
+</para>
+<para>
+Szabványos Adatfolyamok
+</para>
+<para>
+stdin / stdout / stderr || - bemenet - kimenet - hibakimenet
+</para>
+<para>
+stdin csak olvasható a másik kettő csak írható.A C++ adatfolyamokban a stream agyal.Ezek bájtok sorozata.Istream - input stream - ezek az objektumok csak olvashatóak.
+Azután van az ostream amely osztályainak példányai csak írhatóak. A következőkben rengeteg jó példát olvashatunk ezekkel kapcsolatban.
+</para>
+<para>
+Hibakezelést illetően : -eofbit | -failbit | -badbit | -goodbit --> failbit - hiba , badbit --> komoly/fatális hiba , eofbit --> adatfolyam eléri az állomány végét , goodbit --> konstans azt jelzi , hogy a fenti hibák közül szerencsére egyik sem lépett fel.
+</para>
+<para>
+Manipulátorok / formázás
+</para>
+<para>
+Formázás szempontjábol az alábbiakat formázhatjuk : -mezőszélesség , -a kitöltő karakter , -igazítás , -az egész számok számrendszerek , -a lebegőpontos számok formátuma , -mutassa e a + jelet , a helykitöltő nullákat , ileltve az egész számok számrendszerének alapját , -kis vagy nagybetűk legyenek-e a normál alak E-je és a hexadecimális számjegyek.
+</para>
+<para>
+Manipulator- hex,oct,dec,showbase,noshowbase,showpos,noshowpos,uppercase,nouppercase,
+boolalpha,noboolalpha
+</para>
+<para>
+Állománykezelés
+</para>
+<para>
+istream,ostream,ifstream - bemeneti állomány-adatfolyam,ofstream - kimeneti állomány adatfolyam,fstream - A kétirányú adatfolyamot az fstream osztály valósítja meg.
+</para>
+<para>
+Jelzőbitek: in,out,app,ate,trunc,binary
+</para>
+<para>
+Ezeknek lehetnek kombinációik is: in,out,out|app,out|trunc,in|out,in|out|trunc,binary,ate - ezek c megfelelői szintén azonos sorrendben, mint ahogyan írtuk a kombinációkat. - r,w,a,w,r+,w+,...b,nincs megfelelő.
+</para>
+<para>
+Egyes esetekben van lehetőségünk pozícionálásra és ezt ezekkel a tagfüggvényekkel tesszük meg: - Bemeneti adatfolyam: tellg(),seekg(pozíció),seekg(eltolás,pozíció)
+Kimeneti adatfolyam: tellp(),seekp(pozíció),seekp(eltolás,pozíció)->pozíció:ios::beg(eleje),ios::end(vége),ios::cur(aktuális pozíció)
+</para>
+<para>
+<command>Tizenegyedik Heti Előadás / Kilencedik dokumentáció</command>
+</para>
+<para>
+Kivételkezelés - a megszakítások kezelését tudjuk elvenni az operációs rendszertől és felhozzuk azt a programunk szintjére.A kivételek megszakítást okozhatnak sőt okoznak.A kivételkezelést a program végzi el.Megszakításokat tudjuk maszkolni, ez persze nem csak az operációs rendszer szintjén , hanem nyelvi szinten is.A figyelések letilthatóak , vagy engedélyezhetőek. A legegyszerűbb kivételkezelés ha letiltjuk a megfigyelést .. ennek következtében a megszakítás bekövetkezik és feljön programszintre, a kivétel kiváltódik, viszont a programunk nem vesz róla tudomást, hanem szimplán tovább fog pörögni.Ez rossz hatással is lehet akár.
+</para>
+<para>
+A kivételekről elmondható , hogy általában van nevük illetve kódjuk. A PL/I , illetve ADA programnyelvet megbeszéltük előadáson , hogy átugorhatjuk , mert nem fogunk velük dolgozni.
+</para>
+<para>
+Javaban is megneztuk a könyben , hogyan zajlik a kivételkezelés.Leginkébb oda kell figyelnünk , hogy mindenki megfelelően tudja örökölni a typusokat ,tehát , hogy az őse jó legyen.A kivételeknek két nagyobb csoportja van az ellenőrzött ls a nem ellenőrzött kivételek.Utasításkészlet segítségével történik az ellenőrző kezelése.Csak a throwable objektumok dobhatóak el, amelyek a java.lang-on belül találhatóak.Két alapvető osztálya van - ERROR - EXCEPTION . A throw lényegében a kivétel-osztály példányosítása.A pici könyvben erre láthatunk is egy kiváló pldét a 40-41. oldalon. 
+</para>
+<para>
+A BME-s könyvünk tizedik fejezetében is olvashatunk részletesen a kivételkezelésről. Alapokról , hagyományos hibakezelési eljárásokról.
+A hibakódok használatára épülő megoldás számos hátránnyal is járhat melyek közül 3-at fel is sorolunk : a körülményes a hívási lánc mindegyik levelén ellenőrizni a visszaadott hibakódot. A funkcionalitás és a hibás szituációkat irányító kód keveredik. Nem vagyunk kötelesek ellenőrizni a hibás eseteket.
+</para>
+<para>
+A kivételkezelés alapjai
+</para>
+<para>
+Megoldja , hogy ha hiba keletkezik , vagyis hibát talál akkor azonnal áttérjen a hibakezelő ágra és ott folytatódjon.Kivétel esetén a futás azonnal a kivételkezelőre hoppanjon.A 190. oldalon található példában láthatjuk , hogy mi történik ha két különböző ágon végigmegyünk. Az egyik esetben nullát kapunk míg ugye hiba esetén érdekes a történet , akkor - >
+<programlisting>
+<![CDATA[ 
+Enter a nonzero number : 0
+Error! The error text is: The number can not be zero.
+Done. // ez a 190. oldal programjában az alábbi helyen található
+if (d == 0)
+	throw " The number can not be zero.";
+	-------------------------------------// persze itt nem kötőjelek vannak a programban 
+	catch (const char* exc)
+	{
+		cout<< "Error! The error text is: " <<exc<<endl;
+	}
+	cout<<"DONE."<<endl;
+]]>
+</programlisting>
+A kimenet ha a felhasználó rossz , bemenetet ad és nem amit a feladat kér , akkor a try-catct blokkot láthatjuk , catch ággal , ahogyan az működik.A try protected blokkba {} közé írjuk, a normál működés kódját , a catch ágban a {} közé a hibakezelőt magát.
+</para>
+<para>
+A kivételkezelés mechanizmusának alapjait olvashatjuk továbbá , hogy kicsit átismételjük , mi is volt található a bevezetőben , ami ezen részt illette.Ezeket a BME könyvünk 193. oldalán olvashatjuk. Különféle példákon át olvashatjuk és tanulmányozhatjuk a kivételkezelést , mint például ha a ValidateAndPrepare függvény pData paramétere NULL vagy ha a ValidateAndPrepare függvény count paramétere kisebb 0-nál , Save függvényben a fájl megnyitása nem sikerül akkor mi történik.
+</para>
+<para>
+Vannak egymásba ágyazott try-catch blokkok is.Ezáltal lehetőségük van arra , hogy egyes kivételeket a kidobott kivételhez közel , kisebb szinten kezeljünk.
+</para>
+<para>
+Az elkapott kivétel újradobása - a catchelt kivétel a throw kulcszó paraméter nélküli alkalmazásával újra is dobható.Erre kiváló példa a 196. oldalon található kódcsipet.Hála annak , hogy a könyv ennyire szemléletes nem jelenteném ki , hogy könnyen , de azt kijelentem , hogy átláthatóbban , rávezetőbben lehet megtanulni a programozási alapokat.Ezt mutatja meg a dokumentációnk végezetén a Verem Visszacsévelése. Egy kivétel dobásakor a lokális változóink felszabadulhatnak egyes függvényeinkben a láncában felfelé haladva. Magát ezt a folyamatot nevezzük verem visszacsévelésnek.Láthatunk ismét egy példát.A lépéseket is megleshetjük értelmezhetjük.
+</para>
+<para>
+A laborkártyáinkra hajazva amit az előadásokon is használunk , találunk egy példát a BME-s könyben is a 211. oldalon.Jelenleg az erőforrásokat kezeljük.A problémánk , hogy utólag nem tudunk semmit sem pótolni és előfordulhat , hogy felszabadul a Message objektum melyet a kódban megtalálunk.Kivételek esetén is foglalkoznunk kell a helyileg elfoglalt erőforrások, mint a dinamikus memóra, fájl, hálózati és adatbázis kapcsolat stb.felszabadításáról.
 </para>
 </section>
-    <section>
-        <title>Programozási alapfogalmak</title>
-        <para>         
-            <citation>PICI</citation>       
-        </para>
-    </section>        
-    <section>
-        <title>Programozás bevezetés</title>
-        <para>                
-            <citation>KERNIGHANRITCHIE</citation>
-        </para>
-        <para>
-            Megoldás videó: <link xlink:href="https://youtu.be/zmfT9miB-jY">https://youtu.be/zmfT9miB-jY</link>
-        </para>        
-    </section>        
-    <section>
-        <title>Programozás</title>
-        <para>                
-            <citation>BMECPP</citation>
-        </para>
-    </section>    
 <section>
 <title>Tutoriál</title>
 <para>
