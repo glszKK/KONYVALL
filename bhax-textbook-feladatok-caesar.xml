@@ -6,7 +6,7 @@
         </keywordset>
     </info>
     <section>
-        <title><type>int ***</type> háromszögmátrix</title>
+        <title><type>double **</type> háromszögmátrix</title>
         <para>
            
         </para>
@@ -79,8 +79,20 @@ main ()
             Megoldás forrása:    <link xlink:href="https://github.com/lovaszbotond/Caesar/blob/master/int**"></link>            
         </para>
         <para>
-A dinamikus memóriakezeléssel fogunk foglalkozni a feladat megoldása során.A feladatot a szokásos módon, a headerben a megfelelő függvénykönyvtárak behívásával kezdtük el.Létrehoztuk a <function> rs = 5 </function>-el  a sorainknak a számát amire szükségünk van.A <function>double **tb</function> deklarálunk és lefoglalunk a memóriában 8 byte-ot jelen esetben.Majd szimplán egy kiíratást végzünk . A <function>%p</function> segítségével egy hexadecimális számot fogunk ki írni mely a pointer számát fogja adni. Az adott sorban a vessző után látjuk , hogy a cimkéző operátor segítségével 1 bájt címét fogjuk ki íratni.Konkrétan lekérdezzük a címét.
-A <function>malloc</function> vissza ad egy pointert a lefoglalt területre. Memóriát foglal a szabad tárban. Kap egy paramétert ami az rs függvényében zajlik.(5)Következőkben látjuk , hogy a <function>size of (double*)</function>megmondja hogy mennyi hely(byte) kell a double* típusnak, ami a feladatban 5*8 azaz 40 byte helyet fog lefoglalni.Egyébként ami vissza kapunk ponter bármire mutathat a malloc esetében.Típus kényszerítjük ami miatt a "size of" méretét fogja vissza adni. A <function>tb</function>egyenlő a malloc által vissza adott értékkel memória foglalás szempontjából.Ha bármilyen hiba merülne fel akkor pedig a program kilép. Ezt biztosítjuk a <function>==NULL</function> szekcióban.A <function>NULL</function> nem mutat sehova.A folytatásban megkreáljuk az 5 sorból álló háromszögünket.Nagyon jól lehet szemléltetni a hivatkozásainkat , hogyan és miként működnek. 
+A dinamikus memóriakezeléssel fogunk foglalkozni a feladat megoldása során.A feladatot a szokásos módon, a headerben a megfelelő függvénykönyvtárak behívásával kezdtük el.
+<programlisting language="c"><![CDATA[ rs=5]]></programlisting>Létrehoztuk a <function> rs = 5 </function>-el  a sorainknak a számát amire szükségünk van.
+<programlisting language="c"><![CDATA[double **tb]]></programlisting>
+A <function>double **tb</function> deklarálunk és lefoglalunk a memóriában 8 byte-ot jelen esetben.Majd szimplán egy kiíratást végzünk . A <function>%p</function> segítségével egy hexadecimális számot fogunk ki írni mely a pointer számát fogja adni. Az adott sorban a vessző után látjuk , hogy a cimkéző operátor segítségével 1 bájt címét fogjuk ki íratni.Konkrétan lekérdezzük a címét.
+<programlisting language="c"><![CDATA[
+ if ((tb = (double **) malloc (rs * sizeof (double *))) == NULL)
+]]></programlisting>
+A <function>malloc</function> vissza ad egy pointert a lefoglalt területre. Memóriát foglal a szabad tárban. Kap egy paramétert ami az rs függvényében zajlik.(5)Következőkben látjuk , hogy a <function>size of (double*)</function>megmondja hogy mennyi hely(byte) kell a double* típusnak, ami a feladatban 5*8 azaz 40 byte helyet fog lefoglalni.Egyébként ami vissza kapunk ponter bármire mutathat a malloc esetében.Típus kényszerítjük ami miatt a "size of" méretét fogja vissza adni. A <function>tb</function>egyenlő a malloc által vissza adott értékkel memória foglalás szempontjából.Ha bármilyen hiba merülne fel akkor pedig a program kilép. Ezt biztosítjuk a <function>==NULL</function> szekcióban.A <function>NULL</function> nem mutat sehova.A folytatásban megkreáljuk az 5 sorból álló háromszögünket.Nagyon jól lehet szemléltetni a hivatkozásainkat , hogyan és miként működnek.
+<programlisting language="c"><![CDATA[
+tb[3][0] = 42.0;
+(*(tb + 3))[1] = 43.0;
+*(tb[3] + 2) = 44.0;
+*(*(tb + 3) + 3) = 45.0;
+]]></programlisting> 
 Lehet látni , hogy a <function>tb[3][0] = 42.0</function>a harmadik sor első elemét egyenlővé tesszük 42.00-val. Azért az első eleme, erről még nem beszáltünk, mert 0-tól kezdjük a számolást/indexelést.Az alatta lévő sorban a második elemre hivatkozunk, alatta a harmadik elemre, majd a negyedik elemre.A "*" al hivatkozok azon a címen tárolt pointerre.Tökéletesen reprezentálja a példa mily módon és hányféleképpen tudunk hivatkozni.A <function>for</function>ciklusukhoz különösképpen nem tudunk kiegészítést írni . A Chomsky fejezetünkben a hivatkozásos példánál kiveséztük nagy részét és a lényeg megtalálható benne ami ezen feladat megértéséhez kell.Amit esetlek meglehet említeni a <function>tb[i][j]</function>ahol az "i" a sor a "j" pedig az oszlopot jelzik.Fontos hogy vizsgáljuk a kapcsos zárójelek elhelyezkedését,hisz úgy fogjuk meg érteni mikor mi hajtódik végbe.A <function>%f</function> egy float típusú változót fog vissza adni.A végén a <function>free</function>-ről kell pár sort írnunk.Lényegében felszabadítja a memóriában tárolt/lévő pointerek által lefoglalt címeket. Ez fontos, hogy ne maradjon meg az adat amit tárol , mert ha a program még dolgozna tovább és ezt nem tennénk meg akkor egy idő után betelne a ram.
         </para>            
     </section>        

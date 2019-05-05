@@ -934,7 +934,73 @@ A laborkártyáinkra hajazva amit az előadásokon is használunk , találunk eg
 <section>
 <title>Tutoriál</title>
 <para>
-A Tutoriáltjaim : Czinke Márton 3 feladat, Garbóczy Vajk 1 feladat , Petrus József Tamás 2 feladat , Őz Ágoston 3 feladat
+A Tutoriáltjaim akiknek segítetem: Czinke Márton 3 feladat, Garbóczy Vajk 1 feladat , Petrus József Tamás 2 feladat , Őz Ágoston 3 feladat , Nyitrai Dávid 1 feladat.
 </para>  
 </section>  
+<section>
+<title>Irodalomjegyzék</title>
+<para>
+A feladatok közben , már több helyen is jeleztem , mikor melyik forrásból táplálkoztam.
+</para>
+<para>
+1<link xlink:href="https://hu.wikipedia.org/wiki/Monty_Hall-paradoxon"></link>
+</para>
+<para>
+2<link xlink:href="https://hu.wikipedia.org/wiki/Form%C3%A1lis_nyelvtan"></link>
+</para>
+<para>
+3<link xlink:href="http://project.mit.bme.hu/mi_almanach/books/aima/ch20s05"></link>
+</para>
+<para>
+4<link xlink:href="http://mialmanach.mit.bme.hu/eloadasanyagok/perceptron"></link>
+</para>
+<para>
+5<link xlink:href="https://pdfs.semanticscholar.orgf54b0b315d979142d7d33b8e69cc8942bad1f60d.pdf"></link>
+</para>
+<para>
+6<link xlink:href="https://calmarius.blog.hu/2010/11/18/c_dolgok_amelyekkel_sokat_lehet_szivni"></link>
+</para>
+<para>
+7<link xlink:href="https://bhaxor.blog.hu/2018/10/10/myrmecologist"></link>
+</para>
+<para>
+8<link xlink:href="https://hu.wikipedia.org/wiki/%C3%89letj%C3%A1t%C3%A9k"></link>
+</para>
+<para>
+9<link xlink:href="https://www.humanbenchmark.com/tests/reactiontime?fbclid=IwAR0preUgZP8EL_beoY79H8T3AoIx_iqCUYHkjXeHNzYrx1aB5DIR3v4NdZE"></link>
+</para>
+<para>
+A munkám során alappilléreknek mondhatóak az alábbi könyvek :
+</para>
+<para>
+Juhász István - Magas Szintű programozási nyelvek I
+</para>
+<para>
+<link xlink:href="https://arato.inf.unideb.hu/panovics.janos/programozas12009.pdf?fbclid=IwAR2-xCKbJJbF2ihEiaSTwwBxqaoybZvL-C4zvkM7PF1e0OsKxqzPvar166A"></link>
+</para>
+<para>
+Brian W. Kernighan - Dennis M.Ritchie : A C programozási nyelv Az ANSI szerint szabványosított változat
+</para>
+<para>
+<link xlink:href="http://lidi.uw.hu/krc/index.html?fbclid=IwAR0ZJd9Q3OX2gizF-mCP__iu46Qb7gkUf52QVMZ7IYUdYAMaVgx70kElmcs#Tartalom"></link>
+</para>
+<para>
+Alkalmazott informatika sorozat - Benedek Zoltán, Levendovszky Tihamér : Szoftverfejlesztés C++ nyelven
+</para>
+<para>
+Ez utóbbi , feladatait , Gutenberg olvasónaplónkban is sok helyen szemléltettük, a bővebb kifejtés érdekében.
+</para>
+<para>
+A könyv megírásának szintén kulcs weboldala volt a <link xlink:href="https://progpater.blog.hu/"></link> melyet segítségül kaptunk a félév során, hogy felhasználhassuk forrásait.
+</para>
+<para>
+Továbbá szeretném megköszönni az UDPROG facebook közösségének és a Tanár úrnak a rengeteg , megosztott videót és hasznos információt amiből szintén tudtam fejleszteni tudásomat , és könyvem értékét amely a prog 1 -es részt illeti.
+</para>
+<para>
+A <link xlink:href="www.stackoverflow.com"></link> teljes tudásbázisát felhasználva , segítséget kaptam bizonyos függvénykönyvtárbeli elemek/parancsok megértésére.
+</para>
+<para>
+Szintén nagy segítséget kaptam a <link xlink:href="https://sourceforge.net/projects/udprog/"></link> UDPROG-os repoban talált korábban kidolgozott feladatokból, melyek szintúgy hozzás segítettek engem , hogy könyvem változatosabb legyen.
+</para>
+</section>
 </chapter>                

@@ -66,6 +66,23 @@
 	}
 	]]>
 	</programlisting>
+<programlisting language="c"><![CDATA[
+#include <stdio.h>
+#include <unistd.h>
+#include <omp.h>
+
+int main()
+{
+
+#pragma omp parallel
+
+	{
+	for(;;);
+	}
+	return 0;
+}
+]]>
+</programlisting>
         <para>
             Megoldás videó:
         </para>
@@ -85,12 +102,26 @@
             A feladatunk az volt , hogy írjunk három végtelen ciklust melyek 1 mag 0%-os,1 mag 100%-os illetve 4 mag 100%-os igénybevételét követelte. Az 1 mag 100%-os megoldásnál háromféleképpen is el lehetett volna készíteni a programunkat viszont mi a 'for' ciklust választottuk ami számomra a legszimpatikusabb volt, de kiválóan működött volna a (while(1){}/while(true){}) vagy a (do {} while(1) / do {} while(true)) 	programkód is.Jelen esetben nem adtunk meg tömböt, hogy honnan kezdjen számolni ( minek a függvényében) meddig menjen és mekkorákat.Így a program megállás nélkül tud futni , és nem áll le míg mi nem adunk meg egy erre megfelelő parancsot.Ez esetben 1 szálat használ és az pörgeti 100%-on a processzort.
 </para>
 <para>
- A következő esetben 0%on szeretnénk használni , amit úgy oldottunk meg, hogy a sleep parancsot vettük elő melynek a paraméterét másodpercben kell számolnunk. Mi az '1'-et adtuk meg neki .Ekkor a program alvó állapotba kerül és a magasabb prioritású programok előnyt élveznek vele szemben.Amint nem lesz olyan futó folyamat melyre érvényesülne a korábban leírt kijelentésem , a program feléled.
+ A következő esetben 0%-on szeretnénk használni , amit úgy oldottunk meg, hogy a <function>sleep</function> parancsot vettük elő melynek a paraméterét másodpercben kell számolnunk. Mi az '1'-et adtuk meg neki .Ekkor a program alvó állapotba kerül és a magasabb prioritású programok előnyt élveznek vele szemben.Amint nem lesz olyan futó folyamat melyre érvényesülne a korábban leírt kijelentésem , a program feléled.
 </para>
 <para>
-A harmadik verzióban mind a négy szálunkat 100%-on szeretnénk dolgoztatni.Létrehoztunk 3 változót.Feltételnek készítünk egy gyerek programot melyet igazzá téve egy végtelen ciklusba teszünk bele, 1 változónkat felhasználva.A másik kettővel is így teszünk , a 4. esetben már erre nincs szükségem.Nem adunk meg neki utasítást melyre ki léphetne vagy le állhatna a programunk. Miután le generáltuk , lehet látni , hogy mindegyik szál 100%-os terheltségen dolgozik . 
+A harmadik verzióban mind a négy szálunkat 100%-on szeretnénk dolgoztatni.Létrehoztunk 3 változót.
+<programlisting language="c"><![CDATA[
+int a1,a2,a3;
+]]></programlisting>
+Feltételnek készítünk egy gyerek programot melyet igazzá téve egy végtelen ciklusba teszünk bele, 1 változónkat felhasználva.
+<programlisting language="c"><![CDATA[
+if(!(a1=fork()))
+{
+for(;;);
+}
+]]></programlisting>
+A másik kettővel is így teszünk , a 4. esetben már erre nincs szükségem.Nem adunk meg neki utasítást melyre ki léphetne vagy le állhatna a programunk. Miután le generáltuk , lehet látni , hogy mindegyik szál 100%-os terheltségen dolgozik . 
 Remélem lehet érteni amit , írtam . Én örülök , hogy jobban elmélyedtem a ciklusok világában, és együtt tanulhattunk egy újabb érdekességet.
-        </para>            
+        </para>
+<para>
+Az utolsó esetben nem tudtam kiélni magamat teljesen , hisz az UDPROG csoportban az Őz Ágoston által  megosztott post alatt, a kommentek között található youtube videó alapján dolgoztam , figyeltem , a programot megírtam amit segítségül kaptunk , és eredménye az lett , hogy nem futott mindegyik mag 100%-on. Hiába sikerült lefordítani és futtatni a programunkat.Ezzel ellentétben , betettem azért a könyvünkbe , hogy szemléletesebb legyen.
+</para>            
     </section>        
         
     <section>
@@ -404,25 +435,63 @@ main (void)
 Az első az if logikai utasítást felhasználva készült a második az if elhagyásával a for ciklusba belenyúlva valósult meg. 
 </para>
 <para>
-Include-olva a megfelelő csomagokat <command>curses.h , unistd.h</command> el is kezdhetünk dolgozni a feladat megoldásán. 
+<programlisting language="c"><![CDATA[
+#include <stdio.h>
+#include <curses.h>
+#include <unistd.h>
+]]></programlisting>
+Include-olva a megfelelő csomagokat/függvénykönyvtárakat - <command>curses.h , unistd.h , stdio.h</command> el is kezdhetünk dolgozni a feladat megoldásán.
+<programlisting language="c"><![CDATA[WINDOW *ablak
+ablak = initscr () ;]]></programlisting> 
 Az <command>ablak = initscr ();</command> megadja a futtatás környezetének megfelelően az adott ablakunknak az adatait , amelybe utána szépen sorban elkezdhetem be táplálni a rendelkezésre álló terünknek az információit melyek alapján tökéletesen fog tudni dolgozni a program és pattogni a labda.Az x->oszlop | y->sor | deltax->lépéstáv(oszlop) | deltay->lépéstáv(sor) | mx->oszlopok száma | my->sorok száma 
         </para>
 <para>
-Láthatjuk korábbról , hogy a for ciklusunk egy végtelen ciklus lesz melyben a printf"curses" által kiterjesztett parancsait használjuk . <command>void getmaxyx(WINDOW *win, int y, int x);</command>
-itt utalunk vissza a <command>WINDOW *ablak</command>-ra ahol átadjuk paraméterként az ablakban eltárolt értékeket és hogy hol tárolja el az ablakunk szélességét/hosszúságát.A <command>mvprintw(y,x,"@");</command> megadja az adott ablakban használt karakteremet , mit is szeretnék majd látni a monitoromon, illetve felhasználja a meglévő koordinátákat ahol fogja mozgatni a karaktert.
-A <command>refresh()</command> az aktuális kimenetunk a terminalban. A <command>usleep()</command> alapértelmezett értelemben mikrosecundumban számol ami a másodperc egy milliomod része , melyet egy tizedre állítunk a programunkban . Minél kisebbre állítjuk ezt az értéket annál gyorsabban fog haladni a kijelzőnkön az adott jelöléssel ellátott objektumunk.
+Láthatjuk korábbról , hogy:
+<programlisting language="c"><![CDATA[
+for (;;)
+]]></programlisting> a for ciklusunk egy végtelen ciklus lesz melyben a printf"curses" által kiterjesztett parancsait használjuk .
+<programlisting language="c"><![CDATA[
+void getmaxyx(WINDOW *win int y , int x) //WINDOW ABLAK
+]]></programlisting> <command>void getmaxyx(WINDOW *win, int y, int x);</command>
+itt utalunk vissza a <command>WINDOW *ablak</command>-ra ahol átadjuk paraméterként az ablakban eltárolt értékeket és hogy hol tárolja el az ablakunk szélességét/hosszúságát.
+<programlisting language="c"><![CDATA[
+mvprintw(y,x,"@");
+]]></programlisting>
+A <command>mvprintw(y,x,"@");</command> megadja az adott ablakban használt karakteremet , mit is szeretnék majd látni a monitoromon/stdouton, illetve felhasználja a meglévő koordinátákat ahol fogja mozgatni a karaktert.
+<programlisting language="c"><![CDATA[refresh();]]></programlisting>
+A <command>refresh()</command> az aktuális kimenetunk a terminalban.
+<programlisting language="c"><![CDATA[usleep();]]></programlisting>
+ A <command>usleep()</command> alapértelmezett értelemben mikrosecundumban számol ami a másodperc egy milliomod része , melyet egy tizedre állítunk a programunkban . Minél kisebbre állítjuk ezt az értéket annál gyorsabban fog haladni a kijelzőnkön az adott jelöléssel ellátott objektumunk.
 </para>
 <para>
-Az if részlegben négy különböző feltételt szabunk meg . Elérte a jobb oldalt ? Elérte a bal oldalt? Elérte a tetejét ? Elérte az alját? - kérdéseket tehetnénk fel melyek rávezetnek a feladat megoldására. A jobb oldal esetében az oszlopokhoz felhasznált "mx" lesz a segítségünkre. Azaz a maximális oszlopszám -1-nél ha nagyobb vagy egyenlő az x, akkor megszorozva -1-el , elindítjuk a labdánkat visszafele. Míg a bal oldal esetében ha az x 0-nál kisebb vagy egyenlő , akkor ugye -1*-1 +1 lesz így elindítjuk ellentétes irányba.A tetejét tekintve az y érték fog segíteni. 
+<programlisting language="c"><![CDATA[
+   if ( x>=mx-1 ) {
+            deltax = deltax * -1;
+        }
+        if ( x<=0 ) {
+            deltax = deltax * -1;
+        }
+        if ( y<=0 ) { 
+            deltay = deltay * -1;
+        }
+        if ( y>=my-1 ) { 
+            deltay = deltay * -1;
+        }
+]]></programlisting>
+Az if részlegben(még mindig a for ciklusunkon belül) négy különböző feltételt szabunk meg . Elérte a jobb oldalt ? Elérte a bal oldalt? Elérte a tetejét ? Elérte az alját? - kérdéseket tehetnénk fel melyek rávezetnek a feladat megoldására. A jobb oldal esetében az oszlopokhoz felhasznált "mx" lesz a segítségünkre. Azaz a maximális oszlopszám -1-nél ha nagyobb vagy egyenlő az x, akkor megszorozva -1-el , elindítjuk a labdánkat visszafele. Míg a bal oldal esetében ha az x 0-nál kisebb vagy egyenlő , akkor ugye -1*-1 +1 lesz így elindítjuk ellentétes irányba.A tetejét tekintve az y érték fog segíteni. 
 Ahogyan korábban is említettük , ha az y kisebb vagy egyenlő 0-nál akkor -1-el való szorzás után pozitívot varázsolva belőle elindíthatjuk vele ellentétes irányba. Alját tekintve pedig mint ahogy az oszlopok maximális számánál is csináltuk a sorok maximális értékénél szorzom be -1-el , így visszafordítva irányát újra a helyes irányt veszi fel kijelzőnkön. 
 </para>
 <para>
 A második felének a feladatban ahogy írtuk korábban is  "if"-ek nélkül kell dolgoznom , melyhez a "for" ciklusba kell belenyúlnom.A "%" a maradékos osztásnak a jele , melyre szükségünk van ahoz hogy megoldjuk a feladatot.Mindig egészen addig kell osztanunk a modulót , míg vissza nem adja annak a számnak az értékét melyet elosztunk egészen addig , míg egyenlő nem lesz az ablakunk hosszúságával/szélességével.Ekkor vissza áll 1/-1-re aminek a következtében elkezd visszafele pattogni a karakterünk.Mivel egy végtelen ciklusban vagyunk benne ezért egy véget nem érő pattogásról beszélünk , egészen addig míg manuálisan mi magunk le nem lőjük a programunkat.
 </para>
 <para>
-Szemfüles olvasóink , kiszúrhatták , hogy a "for" cikluson kívül , még 3 függvényt is meghívunk , ahoz , hogy tökéletesen műküdjön a programunk.A <command>noecho();</command> segítségével , kikapcsoljuk a karakterünk visszhangját. A tty driver echo systemét inaktiváljuk.
+Szemfüles olvasóink , kiszúrhatták , hogy a "for" cikluson kívül , még 3 függvényt is meghívunk , ahoz , hogy tökéletesen műküdjön a programunk.
+<programlisting language="c"><![CDATA[noecho();]]></programlisting>
+A <command>noecho();</command> segítségével , kikapcsoljuk a karakterünk visszhangját. A tty driver echo systemét inaktiváljuk.
 A tty driver folyton buffereli a karaktersorozatomat egészen addig amíg új sor nem lesz vagy a szállítási értéke 0 nem lesz.
+<programlisting language="c"><![CDATA[cbreak();]]></programlisting>
 A <command>cbreak();</command> alap esetben törli,megszakítja a karakterfolyamatot. 
+<programlisting language="c"><![CDATA[nodelay();]]></programlisting>
 A <command>nodelay();</command> hívásra kerül , és nem állít be időzítőt. Az időtullépés célja , hogy hogy a funkcióbillentyűtől kapott és a felhasználó által beírt szekvenciák között kiszűrje a különbséget.
 </para>
     </section>                     
@@ -541,8 +610,27 @@ main (void)
             Megoldás forrása: <link xlink:href="https://github.com/lovaszbotond/Turing/blob/master/Pagerank"></link>
         </para>
         <para>
-           A PageRank egy olyan algoritmus amellyel weboldalak relatív fontosságát lehet megállapítani. Azt adja meg, hogy véletlenszerű böngészés esetén mekkora az esélye annak, hogy az adott oldalra találunk. Alapja,hogy egy oldalon minden hivatkozás egy-egy "szavazat" a hivatkozott oldalra. Az alapján meg lehet állapítani egy oldal relatív fontosságát, hogy hány az oldalra mutató hivatkozás van a többi oldalon, illetve, hogy hány oldalra hivatkozik az adott oldal. Az algoritmusban egy jobb minőségű oldal "szavazata" erősebbnek számít, mint egy kis relatív fontosságúé. Mivel a felhasználó általában nem fogja végignézni az összes linket a weboldalon, ezért bevezettek a képletbe egy csillapító faktort.
+A PageRank algoritmus alapértelmezetten arra szolgál , hogy a weboldalak relatív fontosságát tudjuk kiszámolni/megállapítani.A lényege , hogy véletlenszerű böngészések során mennyi annak az esélye , hogy a keresett oldalra találunk.Egy oldalon minden hiperlink/hivatkozás egy-egy "voks" a hivatkozott oldalra.Ez alapján megtudjuk mondani egy oldalnak a relatív fontosságát, hogy hány oldalra mutató hivatkozás van a többi weboldalon , illetve , hogy mennyi oldalra hivatkozik az aktuális oldalunk.Az Algoritmusunkban egy jobb minőségű oldal "voksa" erősebbnek számít mint egy kevésbe erős relatív fontosságú oldal.Átlagosan ki lehet jelenteni , hogy a felhasználók többsége nem fogja végignézni az összes linket a weboldalon , ezért van egyfajta enyhítő/csillapító faktor amit bevezettek a képletbe.
         </para>
+<para>
+Nézzünk is meg pár ehez tartozó kiegészítést - >
+</para>
+<para>
+<programlisting language="c"><![CDATA[
+if (tavolsag(PR, PRv , 4) < 0.00000001)
+break;
+]]>
+</programlisting>
+</para>
+<para>
+Láthatjuk  hogy a programunkban fut egy végtelen ciklus , viszont ennek a végtelen ciklusunknak van egy feltétele. Ha az említett távolság kisebb mint 0.000000001 , akkor a programunk sikeresen kilép a ciklusból.
+</para>
+<para>
+Az elmített mutatókat , hogy rendszerezni tudjuk , mátrixokra van szükségünk. Ezeket négyszer-négyes mátrixunk oszlopai és sorai szemléltetik , hogy ki is mutat kire.Tehát ha például az első oszlop első sora tartalmaz egy egyest , akkor első sorelem mutat az első oszlop elemre.
+</para>
+<para>
+Programunka  futást követően négy értékkel fog visszatérni amik maguk , a PageRank értékek lesznek.
+</para>
     </section>
 
     <section xml:id="Brun">
@@ -594,11 +682,18 @@ Ez az eltérés irracionális értelemben a végtelenségig csökken és a felt�
 Nézzük is meg , hogyan működik a program. 
 </para>
 <para>
-A <function>primes(x)</function>vektor mögötti zárójelen belül megadom , hogy mekkora is legyen a vektorom , hány darab prímszámot tápláljak bele.
+A <function>primes(x)</function> vektor mögötti zárójelen belül megadom , hogy mekkora is legyen a vektorom , hány darab prímszámot tápláljak bele.
 </para>
 <para>
-A <function>diff</function> egy új vektor lesz amely az ikerprímeket fogja nekem csak megjeleníteni. A<command>diff = primes[2:length(primes)]-primes[1:length(primes)-1]</command> sorban adom meg , hogyan is adom meg az ikerprímeket. Primes - > prímeken belül-> []-zárójelben adom meg az indexet, 2-es , hogy a másodiktól számolja, "length" pedig hogy végéig a prímeknek, tehát az egész hosszát vegye.Az <function>idx</function> megmondja hanyadik helyen lesz a a különbség 2.A t1primes illetve a t2primes egyértelmű. Csinálunk két azonos 1 tömbös vektort, ennek hála átláthatóbb lesz ha külön egymás alatt szeretném vizsgálni őket oszloposan. 
+A <function>diff</function> egy új vektor lesz amely az ikerprímeket fogja nekem csak megjeleníteni.
+<programlisting language="c"><![CDATA[
+diff = primes[2:length(primes)]-primes[1:length(primes)-1]
+]]></programlisting>
+ A<command>diff = primes[2:length(primes)]-primes[1:length(primes)-1]</command> sorban konstatálom , hogyan is adom meg az ikerprímeket. Primes - > prímeken belül-> []-zárójelben adom meg az indexet, 2-es , hogy a másodiktól számolja, "length" pedig hogy végéig a prímeknek, tehát az egész hosszát vegye.Az <function>idx</function> megmondja hanyadik helyen lesz a a különbség 2.A t1primes illetve a t2primes egyértelmű. Csinálunk két azonos 1 tömbös vektort, ennek hála átláthatóbb lesz ha külön egymás alatt szeretném vizsgálni őket oszloposan. 
 A t2 primes-hoz azért adunk hozzá 2-őt , mert úgy fogom megkapni a t1 primes közvetlen ikerpárját.
+<programlisting language="c"><![CDATA[
+rt1plust2 = 1/t1primes+1/t2primes
+]]></programlisting>
 A <function>rt1plust2</function> a t1primes illetve a t2primes reciprokait adja össze.
 A <function>return</function>-ben a "sum" segítségével összegezzük az rt1plust2-ben kapott összeget. 
 A végén pedig kirajzoltatjuk a függvényünket.
@@ -682,6 +777,10 @@ else ágon pedig kiveszi a kisérletet+játékost.A műsorvezető a "mibol" hoss
 Van egy másik águnk is a "nemvaltoztatesnyer" ahol szintén ha a kisérlet==játékos akkor megvan a kincs és nyertünk.A "valtoztat" a kisérletek mennyiségével lesz egyenlő ami a hosszt illeti. A folytatásban ha valtoztat kivesz kettőt szintén mint korábban a program.
 Kiértékeljük , hogy hányszor nyertünk változtatással és nélküle majd a végén ki írtajuk a kapott
 eredményeket.
+</para>
+<para>
+A monty hall probléma eredetét illetően , sokat segített az alábbi oldal : 
+<link xlink:href="https://hu.wikipedia.org/wiki/Monty_Hall-paradoxon"></link>
 </para>
     </section>
 

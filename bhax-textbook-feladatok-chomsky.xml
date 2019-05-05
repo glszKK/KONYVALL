@@ -88,6 +88,9 @@ A formális nyelvek és formális nyelvtanok vizsgálatának egyik legjelentőse
 <para>
           A generatív nyelv az a legismertebb kategória, amely azoknak a szabályoknak a halmaza , amelyekkel a nyelben minden lehetséges jelsorozat előállítható, azaz hogy egy átírási eljárással ,hogyan is állíthatjuk elő a kitüntetett kezdő szombólumból a többi jelsorozatot , a szabályok egymás utáni alkalmazásával. Ezek variációja véges számű lehet , fent 2 példán át próbáljuk megmutatni , hogyan is kell érteni , alkalmazni ezt a nyelvtant.
         </para>
+<para>
+Feladatomhoz a wikipedia webolalán talált ismereteket használtam fel az előadás mellett kapott ismeretekre: <link xlink:href="https://hu.wikipedia.org/wiki/Form%C3%A1lis_nyelvtan"></link>
+</para>
     </section>        
                 
     <section>
@@ -474,8 +477,10 @@ A main függvényben a program meghívja a yylex függvényt, azaz magát a lexe
 véget ér, akkor a program 0-val tér vissza, amely azt jelzi az operációs rendszernek, hogy a program futása
 sikeresen véget ért.	
         </para>
+<para>
+A youtube videón , egy rövidebb megoldást szemléltetek ami a lexert illeti.
+</para>
     </section>                     
-
 
     <section>
         <title>A források olvasása</title>
