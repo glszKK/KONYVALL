@@ -34,4 +34,84 @@
             Aktualizálás, javítások.
         </revremark>
     </revision>
+ <revision>
+        <revnumber>0.0.5</revnumber>
+        <date>2019-03-03</date>
+        <authorinitials>Botond</authorinitials>
+        <revremark>
+            Turing csokor .- 
+        </revremark>
+ </revision>
+ <revision>
+        <revnumber>0.0.6</revnumber>
+        <date>2019-03-10</date>
+        <authorinitials>Botond</authorinitials>
+        <revremark>
+            Chomsky csokor .-
+        </revremark>
+ </revision>
+ <revision>
+        <revnumber>0.0.7</revnumber>
+        <date>2019-03-16</date>
+        <authorinitials>Botond</authorinitials>
+        <revremark>
+            Caesar csokor .-
+        </revremark>
+ </revision>
+ <revision>
+        <revnumber>0.0.8</revnumber>
+        <date>2019-03-27</date>
+        <authorinitials>Botond</authorinitials>
+        <revremark>
+            Mandelbrot csokor .-
+        </revremark>
+</revision>
+<revision>
+        <revnumber>0.0.9</revnumber>
+        <date>2019-04-04</date>
+        <authorinitials>Botond</authorinitials>
+        <revremark>
+            Welch csokor / Gutenberg olvasónapló .-
+        </revremark>
+</revision>
+    <revision>
+        <revnumber>0.1.0</revnumber>
+        <date>2019-04-13</date>
+        <authorinitials>Botond</authorinitials>
+        <revremark>
+            Conway csokor / Gutenberg olvasónapló .-
+        </revremark>
+</revision>
+ <revision>
+        <revnumber>0.1.1</revnumber>
+        <date>2019-04-22</date>
+        <authorinitials>Botond</authorinitials>
+        <revremark>
+            Schwarzenegger csokor / Chaitin csokor / Gutenberg olvasónapló .-
+        </revremark>
+    </revision>
+  <revision>
+        <revnumber>0.1.2</revnumber>
+        <date>2019-04-29</date>
+        <authorinitials>Botond</authorinitials>
+        <revremark>
+            Gutenberg olvasónapló befejezve
+        </revremark>
+    </revision>
+ <revision>
+        <revnumber>0.1.3</revnumber>
+        <date>2019-05-05</date>
+        <authorinitials>Botond</authorinitials>
+        <revremark>
+            Turing / Chomsky / Perceptron / Mandelbrot Copyright rendbetétele - Irodalomjegyzék befejezése
+        </revremark>
+    </revision>
+ <revision>
+        <revnumber>0.1.4</revnumber>
+        <date>2019-05-09</date>
+        <authorinitials>Botond</authorinitials>
+        <revremark>
+            Revhistory befejezése / Kész könyv 
+        </revremark>
+    </revision>
 </revhistory>
