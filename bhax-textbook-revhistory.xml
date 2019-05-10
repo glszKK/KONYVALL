@@ -37,57 +37,57 @@
  <revision>
         <revnumber>0.0.5</revnumber>
         <date>2019-03-03</date>
-        <authorinitials>Botond</authorinitials>
+        <authorinitials>glszKK</authorinitials>
         <revremark>
-            Turing csokor .- 
+            Turing Fejezet 
         </revremark>
  </revision>
  <revision>
         <revnumber>0.0.6</revnumber>
         <date>2019-03-10</date>
-        <authorinitials>Botond</authorinitials>
+        <authorinitials>glszKK</authorinitials>
         <revremark>
-            Chomsky csokor .-
+            Chomsky Fejezet 
         </revremark>
  </revision>
  <revision>
         <revnumber>0.0.7</revnumber>
         <date>2019-03-16</date>
-        <authorinitials>Botond</authorinitials>
+        <authorinitials>glszKK</authorinitials>
         <revremark>
-            Caesar csokor .-
+            Caesar Fejezet | Hiányzás
         </revremark>
  </revision>
  <revision>
         <revnumber>0.0.8</revnumber>
         <date>2019-03-27</date>
-        <authorinitials>Botond</authorinitials>
+        <authorinitials>glszKK</authorinitials>
         <revremark>
-            Mandelbrot csokor .-
+            Mandelbrot Fejezet
         </revremark>
 </revision>
 <revision>
         <revnumber>0.0.9</revnumber>
         <date>2019-04-04</date>
-        <authorinitials>Botond</authorinitials>
+        <authorinitials>glszKK</authorinitials>
         <revremark>
-            Welch csokor / Gutenberg olvasónapló .-
+            Welch Fejezet és Gutenber olvasó napló elkezdése 
         </revremark>
 </revision>
     <revision>
         <revnumber>0.1.0</revnumber>
         <date>2019-04-13</date>
-        <authorinitials>Botond</authorinitials>
+        <authorinitials>glszKK</authorinitials>
         <revremark>
-            Conway csokor / Gutenberg olvasónapló .-
+            Conway Fejezet | Gutenberg olvasónapló | Hiányzás
         </revremark>
 </revision>
  <revision>
         <revnumber>0.1.1</revnumber>
         <date>2019-04-22</date>
-        <authorinitials>Botond</authorinitials>
+        <authorinitials>glszKK</authorinitials>
         <revremark>
-            Schwarzenegger csokor / Chaitin csokor / Gutenberg olvasónapló .-
+            Schwarzenegger Fejezet | Chaitin Fejezet | Gutenberg olvasónapló
         </revremark>
     </revision>
   <revision>
@@ -95,23 +95,23 @@
         <date>2019-04-29</date>
         <authorinitials>Botond</authorinitials>
         <revremark>
-            Gutenberg olvasónapló befejezve
+            Olvasónapló befejezése
         </revremark>
     </revision>
  <revision>
         <revnumber>0.1.3</revnumber>
         <date>2019-05-05</date>
-        <authorinitials>Botond</authorinitials>
+        <authorinitials>glszKK</authorinitials>
         <revremark>
-            Turing / Chomsky / Perceptron / Mandelbrot Copyright rendbetétele - Irodalomjegyzék befejezése
+            Simítások
         </revremark>
     </revision>
  <revision>
         <revnumber>0.1.4</revnumber>
-        <date>2019-05-09</date>
-        <authorinitials>Botond</authorinitials>
+        <date>2019-05-10</date>
+        <authorinitials>glszKK</authorinitials>
         <revremark>
-            Revhistory befejezése / Kész könyv 
+            Könyv befejezése | probléma a welch fejzettel
         </revremark>
     </revision>
 </revhistory>
